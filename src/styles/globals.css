@@ -1,0 +1,343 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================================================================
+   BNNR Website — Design System
+   Dual-theme (dark default) with warm peach/orange brand accent.
+   ================================================================ */
+
+@layer base {
+  :root {
+    --accent: #f0a069;
+    --accent-hover: #f5b888;
+    --accent-dark: #c96a35;
+    --green: #22c55e;
+    --red: #ef4444;
+    --radius: 12px;
+  }
+
+  /* Dark theme (default) */
+  .dark {
+    --bg: #080810;
+    --bg-subtle: #0d0d18;
+    --fg: #f1f5f9;
+    --muted: #94a3b8;
+    --card-bg: rgba(20, 20, 35, 0.85);
+    --card-solid: #141423;
+    --border-color: rgba(240, 160, 105, 0.18);
+    --border-subtle: rgba(255, 255, 255, 0.06);
+    --code-bg: #0d0d18;
+    --code-border: rgba(240, 160, 105, 0.12);
+    color-scheme: dark;
+  }
+
+  /* Light theme */
+  :root:not(.dark) {
+    --bg: #faf7f2;
+    --bg-subtle: #f5f0e8;
+    --fg: #1a1a2e;
+    --muted: #64748b;
+    --card-bg: #ffffff;
+    --card-solid: #ffffff;
+    --border-color: rgba(200, 106, 53, 0.18);
+    --border-subtle: rgba(0, 0, 0, 0.06);
+    --code-bg: #f8f5f0;
+    --code-border: rgba(200, 106, 53, 0.15);
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-[var(--bg)] text-[var(--fg)] font-sans antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  ::selection {
+    background: rgba(240, 160, 105, 0.3);
+    color: inherit;
+  }
+}
+
+/* ================================================================
+   Molecular Background Pattern (dark theme only)
+   ================================================================ */
+.dark .molecular-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(240, 160, 105, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(240, 160, 105, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(240, 160, 105, 0.01) 0%, transparent 70%);
+}
+
+/* ================================================================
+   Card Component
+   ================================================================ */
+@layer components {
+  .card {
+    @apply rounded-bnnr p-6 backdrop-blur-sm;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  .dark .card {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 0 20px rgba(240, 160, 105, 0.03);
+  }
+
+  /* Glow Button */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-3 rounded-bnnr font-semibold text-white transition-all duration-300;
+    background: linear-gradient(135deg, #f0a069, #c96a35);
+    box-shadow: 0 0 20px rgba(240, 160, 105, 0.15);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 30px rgba(240, 160, 105, 0.3), 0 0 60px rgba(240, 160, 105, 0.15);
+    transform: translateY(-1px);
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center gap-2 px-6 py-3 rounded-bnnr font-semibold transition-all duration-300;
+    border: 1px solid var(--border-color);
+    color: var(--fg);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 15px rgba(240, 160, 105, 0.1);
+  }
+
+  /* Code blocks */
+  pre {
+    @apply rounded-bnnr p-4 overflow-x-auto text-sm leading-relaxed;
+    background: var(--code-bg) !important;
+    border: 1px solid var(--code-border);
+  }
+
+  pre code {
+    @apply text-sm;
+    background: transparent !important;
+  }
+
+  code:not(pre code) {
+    @apply px-1.5 py-0.5 rounded text-sm font-mono;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    color: var(--accent);
+  }
+
+  .dark code:not(pre code) {
+    color: #f5b888;
+  }
+
+  /* Section styling */
+  .section {
+    @apply py-20 px-4 relative;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold mb-4 tracking-tight;
+  }
+
+  .section-subtitle {
+    @apply text-lg md:text-xl mb-12;
+    color: var(--muted);
+  }
+}
+
+/* ================================================================
+   MDX Content Styling
+   ================================================================ */
+.prose {
+  @apply max-w-none;
+  color: var(--fg);
+}
+
+.prose h1 {
+  @apply text-3xl font-bold mt-8 mb-4 tracking-tight;
+  color: var(--fg);
+}
+
+.prose h2 {
+  @apply text-2xl font-bold mt-10 mb-4 tracking-tight;
+  color: var(--fg);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.prose h3 {
+  @apply text-xl font-semibold mt-8 mb-3;
+  color: var(--fg);
+}
+
+.prose h4 {
+  @apply text-lg font-semibold mt-6 mb-2;
+  color: var(--fg);
+}
+
+.prose p {
+  @apply mb-4 leading-relaxed;
+  color: var(--fg);
+}
+
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose a:hover {
+  color: var(--accent-hover, #f5b888);
+}
+
+.prose ul, .prose ol {
+  @apply mb-4 pl-6;
+}
+
+.prose ul {
+  @apply list-disc;
+}
+
+.prose ol {
+  @apply list-decimal;
+}
+
+.prose li {
+  @apply mb-1 leading-relaxed;
+}
+
+.prose table {
+  @apply w-full mb-6 text-sm;
+  border-collapse: collapse;
+}
+
+.prose th {
+  @apply text-left font-semibold py-2 px-3;
+  border-bottom: 2px solid var(--border-color);
+  color: var(--fg);
+}
+
+.prose td {
+  @apply py-2 px-3;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.prose blockquote {
+  @apply pl-4 my-4 italic;
+  border-left: 3px solid var(--accent);
+  color: var(--muted);
+}
+
+.prose hr {
+  @apply my-8;
+  border-color: var(--border-color);
+}
+
+.prose strong {
+  @apply font-semibold;
+  color: var(--fg);
+}
+
+.prose img {
+  @apply rounded-bnnr my-4;
+}
+
+/* ================================================================
+   Scrollbar Styling
+   ================================================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(240, 160, 105, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(200, 106, 53, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(240, 160, 105, 0.4);
+}
+
+/* ================================================================
+   Neon Glow Animation for Hero Logo
+   ================================================================ */
+@keyframes neon-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 10px rgba(240, 160, 105, 0.3))
+            drop-shadow(0 0 30px rgba(240, 160, 105, 0.1));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(240, 160, 105, 0.5))
+            drop-shadow(0 0 50px rgba(240, 160, 105, 0.2));
+  }
+}
+
+.neon-logo {
+  animation: neon-glow 3s ease-in-out infinite;
+}
+
+/* ================================================================
+   Terminal Animation
+   ================================================================ */
+.terminal-window {
+  @apply rounded-bnnr overflow-hidden;
+  background: #0d0d18;
+  border: 1px solid rgba(240, 160, 105, 0.15);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.terminal-header {
+  @apply flex items-center gap-2 px-4 py-2;
+  background: rgba(20, 20, 35, 0.9);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.terminal-dot {
+  @apply w-3 h-3 rounded-full;
+}
+
+.terminal-body {
+  @apply p-4 font-mono text-sm leading-relaxed;
+  color: #94a3b8;
+}
+
+.terminal-body .prompt {
+  color: #f0a069;
+}
+
+.terminal-body .command {
+  color: #f1f5f9;
+}
+
+.terminal-body .output {
+  color: #22c55e;
+}
+
+.terminal-cursor {
+  @apply inline-block w-2 h-4 ml-0.5;
+  background: #f0a069;
+  animation: terminal-cursor 1s step-end infinite;
+}
+
+@keyframes terminal-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
