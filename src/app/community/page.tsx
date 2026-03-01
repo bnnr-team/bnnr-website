@@ -48,7 +48,7 @@ const links = [
     icon: <MessageSquare size={24} />,
     title: "Discussions",
     description: "Ask questions, share ideas, and connect with other users.",
-    href: "https://github.com/bnnr-team/bnnr/issues",
+    href: "https://github.com/orgs/bnnr-team/discussions",
     cta: "Join Discussions",
   },
   {
