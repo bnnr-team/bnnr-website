@@ -10,7 +10,7 @@ const LINES = [
   { type: "prompt", text: "$ " },
   { type: "command", text: "bnnr train --dataset stl10 --with-dashboard" },
   { type: "output", text: "" },
-  { type: "banner", text: "BNNR v0.1 — Train·Explain·Improve" },
+  { type: "banner", text: "BNNR v0.1 — Train → Explain → Improve → Prove" },
   { type: "blank", text: "" },
   { type: "output", text: "▸ Dataset:    STL-10 (96×96, 10 classes)" },
   { type: "output", text: "▸ Device:     CUDA (RTX 4090)" },
@@ -69,21 +69,24 @@ export function TerminalAnimation() {
             {line.type === "output" && (
               <span style={{ color: "#94a3b8" }}>{line.text}</span>
             )}
-            {line.type === "banner" && (
-              <div
-                style={{
-                  display: "inline-block",
-                  margin: "2px 0 2px 12px",
-                  padding: "4px 16px",
-                  border: "2px solid #f0a069",
-                  borderRadius: "4px",
-                  color: "#f1f5f9",
-                  letterSpacing: "0.5px",
-                }}
-              >
-                {line.text}
-              </div>
-            )}
+            {line.type === "banner" && (() => {
+              const inner = `  ${line.text}  `;
+              const w = inner.length;
+              const top = "╔" + "═".repeat(w) + "╗";
+              const mid = "║" + inner + "║";
+              const bot = "╚" + "═".repeat(w) + "╝";
+              return (
+                <pre
+                  style={{
+                    color: "#94a3b8",
+                    margin: "0 0 0 12px",
+                    fontFamily: "'Courier New', Courier, monospace",
+                    fontSize: "inherit",
+                    lineHeight: "inherit",
+                  }}
+                >{top}{"\n"}{mid}{"\n"}{bot}</pre>
+              );
+            })()}
             {line.type === "success" && (
               <span style={{ color: "#22c55e" }}>{line.text}</span>
             )}
