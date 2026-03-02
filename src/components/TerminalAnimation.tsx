@@ -10,7 +10,9 @@ const LINES = [
   { type: "prompt", text: "$ " },
   { type: "command", text: "bnnr train --dataset stl10 --with-dashboard" },
   { type: "output", text: "" },
-  { type: "banner", text: "BNNR v0.1 — Train → Explain → Improve → Prove" },
+  { type: "output", text: "  ╔═════════════════════════════════════════════════╗" },
+  { type: "output", text: "  ║  BNNR v0.1 - Train → Explain → Improve → Prove  ║" },
+  { type: "output", text: "  ╚═════════════════════════════════════════════════╝" },
   { type: "blank", text: "" },
   { type: "output", text: "▸ Dataset:    STL-10 (96×96, 10 classes)" },
   { type: "output", text: "▸ Device:     CUDA (RTX 4090)" },
@@ -68,19 +70,6 @@ export function TerminalAnimation() {
             )}
             {line.type === "output" && (
               <span style={{ color: "#94a3b8" }}>{line.text}</span>
-            )}
-            {line.type === "banner" && (
-              <div
-                style={{
-                  display: "inline-block",
-                  margin: "2px 0 2px 12px",
-                  padding: "4px 14px",
-                  border: "1px solid rgba(240, 160, 105, 0.4)",
-                  color: "#94a3b8",
-                }}
-              >
-                {line.text}
-              </div>
             )}
             {line.type === "success" && (
               <span style={{ color: "#22c55e" }}>{line.text}</span>
