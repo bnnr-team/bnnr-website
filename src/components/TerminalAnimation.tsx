@@ -73,7 +73,7 @@ export function TerminalAnimation() {
               <div
                 style={{
                   display: "inline-block",
-                  margin: "2px 0 2px 12px",
+                  margin: "2px 0 2px 28px",
                   padding: "4px 12px",
                   border: "3px double #94a3b8",
                   color: "#94a3b8",
