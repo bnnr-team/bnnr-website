@@ -10,9 +10,7 @@ const LINES = [
   { type: "prompt", text: "$ " },
   { type: "command", text: "bnnr train --dataset stl10 --with-dashboard" },
   { type: "output", text: "" },
-  { type: "output", text: "  ╔═════════════════════════════════════════════════╗" },
-  { type: "output", text: "  ║  BNNR v0.1 - Train → Explain → Improve → Prove  ║" },
-  { type: "output", text: "  ╚═════════════════════════════════════════════════╝" },
+  { type: "banner", text: "BNNR v0.1 - Train → Explain → Improve → Prove" },
   { type: "blank", text: "" },
   { type: "output", text: "▸ Dataset:    STL-10 (96×96, 10 classes)" },
   { type: "output", text: "▸ Device:     CUDA (RTX 4090)" },
@@ -70,6 +68,25 @@ export function TerminalAnimation() {
             )}
             {line.type === "output" && (
               <span style={{ color: "#94a3b8" }}>{line.text}</span>
+            )}
+            {line.type === "banner" && (
+              <div style={{ display: "inline-flex", flexDirection: "column", marginLeft: "12px", color: "#94a3b8" }}>
+                <div style={{ display: "flex" }}>
+                  <span>╔</span>
+                  <span style={{ flex: 1, overflow: "hidden", whiteSpace: "nowrap" }}>{"═".repeat(60)}</span>
+                  <span>╗</span>
+                </div>
+                <div style={{ display: "flex" }}>
+                  <span>║</span>
+                  <span style={{ padding: "0 0.6em" }}>{line.text}</span>
+                  <span>║</span>
+                </div>
+                <div style={{ display: "flex" }}>
+                  <span>╚</span>
+                  <span style={{ flex: 1, overflow: "hidden", whiteSpace: "nowrap" }}>{"═".repeat(60)}</span>
+                  <span>╝</span>
+                </div>
+              </div>
             )}
             {line.type === "success" && (
               <span style={{ color: "#22c55e" }}>{line.text}</span>
