@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, Mail, Rocket } from "lucide-react";
+import { Rocket } from "lucide-react";
 
 const LAUNCH_DATE = new Date("2026-03-31T18:00:00Z");
 
@@ -173,8 +173,8 @@ export function CountdownPage() {
 
   const isDark = mounted && resolvedTheme === "dark";
   const logoSrc = isDark
-    ? "/logos/napis_logo_czarne.PNG"
-    : "/logos/napis_logo_biale.PNG";
+    ? "/logos/logo_czarne.PNG"
+    : "/logos/logo_biale.PNG";
 
   const pipeline = useMemo(
     () => [
@@ -229,10 +229,10 @@ export function CountdownPage() {
             <Image
               src={logoSrc}
               alt="BNNR"
-              width={220}
-              height={80}
+              width={180}
+              height={180}
               className="neon-logo h-auto"
-              style={{ width: "220px" }}
+              style={{ width: "180px" }}
               priority
             />
           ) : (
@@ -337,61 +337,6 @@ export function CountdownPage() {
           ))}
         </div>
 
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5, duration: 0.5 }}
-          className="flex flex-wrap items-center justify-center gap-4"
-        >
-          <a
-            href="https://github.com/bnnr-team/bnnr"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary"
-          >
-            <Github size={18} />
-            Star on GitHub
-          </a>
-          <a href="mailto:bnnr.team@outlook.com" className="btn-outline">
-            <Mail size={18} />
-            Get Notified
-          </a>
-        </motion.div>
-
-        {/* Terminal-style teaser */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 0.8 }}
-          className="mt-12 w-full max-w-md"
-        >
-          <div className="terminal-window">
-            <div className="terminal-header">
-              <div className="terminal-dot" style={{ background: "#ef4444" }} />
-              <div className="terminal-dot" style={{ background: "#eab308" }} />
-              <div className="terminal-dot" style={{ background: "#22c55e" }} />
-              <span
-                className="ml-3 text-xs"
-                style={{ color: "var(--muted)" }}
-              >
-                Terminal
-              </span>
-            </div>
-            <div className="terminal-body">
-              <div className="leading-6">
-                <span className="prompt">$ </span>
-                <span className="command">pip install bnnr</span>
-              </div>
-              <div className="leading-6 mt-1">
-                <span style={{ color: "var(--muted)" }}>
-                  Coming March 2026...
-                </span>
-                <span className="terminal-cursor" />
-              </div>
-            </div>
-          </div>
-        </motion.div>
       </div>
 
       {/* Bottom bar */}
