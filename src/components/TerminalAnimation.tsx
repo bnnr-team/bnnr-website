@@ -69,24 +69,19 @@ export function TerminalAnimation() {
             {line.type === "output" && (
               <span style={{ color: "#94a3b8" }}>{line.text}</span>
             )}
-            {line.type === "banner" && (() => {
-              const inner = `  ${line.text}  `;
-              const w = inner.length;
-              const top = "╔" + "═".repeat(w) + "╗";
-              const mid = "║" + inner + "║";
-              const bot = "╚" + "═".repeat(w) + "╝";
-              return (
-                <pre
-                  style={{
-                    color: "#94a3b8",
-                    margin: "0 0 0 12px",
-                    fontFamily: "'Courier New', Courier, monospace",
-                    fontSize: "inherit",
-                    lineHeight: "inherit",
-                  }}
-                >{top}{"\n"}{mid}{"\n"}{bot}</pre>
-              );
-            })()}
+            {line.type === "banner" && (
+              <div
+                style={{
+                  display: "inline-block",
+                  margin: "2px 0 2px 12px",
+                  padding: "4px 14px",
+                  border: "1px solid rgba(240, 160, 105, 0.4)",
+                  color: "#94a3b8",
+                }}
+              >
+                {line.text}
+              </div>
+            )}
             {line.type === "success" && (
               <span style={{ color: "#22c55e" }}>{line.text}</span>
             )}
