@@ -70,22 +70,16 @@ export function TerminalAnimation() {
               <span style={{ color: "#94a3b8" }}>{line.text}</span>
             )}
             {line.type === "banner" && (
-              <div style={{ display: "inline-flex", flexDirection: "column", marginLeft: "12px", color: "#94a3b8" }}>
-                <div style={{ display: "flex" }}>
-                  <span>╔</span>
-                  <span style={{ flex: 1, overflow: "hidden", whiteSpace: "nowrap" }}>{"═".repeat(60)}</span>
-                  <span>╗</span>
-                </div>
-                <div style={{ display: "flex" }}>
-                  <span>║</span>
-                  <span style={{ padding: "0 0.6em" }}>{line.text}</span>
-                  <span>║</span>
-                </div>
-                <div style={{ display: "flex" }}>
-                  <span>╚</span>
-                  <span style={{ flex: 1, overflow: "hidden", whiteSpace: "nowrap" }}>{"═".repeat(60)}</span>
-                  <span>╝</span>
-                </div>
+              <div
+                style={{
+                  display: "inline-block",
+                  margin: "2px 0 2px 12px",
+                  padding: "4px 12px",
+                  border: "3px double #94a3b8",
+                  color: "#94a3b8",
+                }}
+              >
+                {line.text}
               </div>
             )}
             {line.type === "success" && (
