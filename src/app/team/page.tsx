@@ -19,7 +19,7 @@ const teamMembers = [
   {
     name: "Mateusz Walo",
     role: "Founder & Lead Developer",
-    bio: "Architect behind BNNR's core engine, XAI pipeline, and augmentation search algorithm. Passionate about making neural networks more robust and explainable.",
+    bio: "Architect behind BNNR's core engine, XAI pipeline, and model improvement loop. Passionate about making neural networks more robust and explainable.",
     avatar: "/team/mateusz.jpeg",
     links: {
       github: "https://github.com/mateuszwalo",
@@ -60,7 +60,7 @@ export default function TeamPage() {
           </span>
         </h1>
         <p className="text-lg max-w-2xl mx-auto" style={{ color: "var(--muted)" }}>
-          The story, the team, and the technology behind Bulletproof Neural Network Recipe.
+          The team, the mission, and the technology behind Bulletproof Neural Network Recipe.
         </p>
       </div>
 
@@ -79,26 +79,27 @@ export default function TeamPage() {
           <div className="space-y-4 text-sm leading-relaxed" style={{ color: "var(--muted)" }}>
             <p>
               <strong style={{ color: "var(--fg)" }}>BNNR</strong> (Bulletproof Neural Network Recipe) is an open-source toolkit that
-              automatically finds the best data augmentation strategies for your PyTorch
-              computer vision models.
+              makes PyTorch vision models production-ready through a closed-loop pipeline:
+              <strong style={{ color: "var(--fg)" }}> Train → Explain → Improve → Prove</strong>.
             </p>
             <p>
-              Instead of manually trying different augmentations and hoping for the best,
-              BNNR runs a systematic search: it trains a baseline model, then iteratively tests
-              candidate augmentations in a branching strategy. Only augmentations that measurably
-              improve performance are kept.
+              BNNR trains a baseline model, explains its decisions with XAI, iteratively
+              improves it with intelligent augmentation, and proves the result with structured
+              reports and a live dashboard. Only changes that measurably improve performance
+              are kept — no guesswork, no manual tuning.
             </p>
             <p>
               What makes BNNR unique is its combination of
               <strong style={{ color: "var(--fg)" }}> novel augmentations</strong> (ChurchNoise, ProCAM, DifPresets, and more),
               <strong style={{ color: "var(--fg)" }}> XAI explainability</strong> (OptiCAM heatmaps showing why the model improves),
               <strong style={{ color: "var(--fg)" }}> XAI-driven augmentations</strong> (ICD and AICD that use saliency maps to intelligently modify training images), and a
-              <strong style={{ color: "var(--fg)" }}> real-time dashboard</strong> for monitoring every aspect of the search.
+              <strong style={{ color: "var(--fg)" }}> real-time dashboard</strong> for monitoring the entire pipeline.
             </p>
             <p>
-              BNNR supports both <strong style={{ color: "var(--fg)" }}>image classification</strong> and
-              <strong style={{ color: "var(--fg)" }}> object detection</strong> tasks, with bbox-aware augmentations and
-              detection-specific metrics (mAP@0.5, mAP@[.5:.95]).
+              BNNR supports <strong style={{ color: "var(--fg)" }}>classification</strong>,
+              <strong style={{ color: "var(--fg)" }}> object detection</strong>, and
+              <strong style={{ color: "var(--fg)" }}> multi-label classification</strong> tasks, with bbox-aware augmentations and
+              task-specific metrics.
             </p>
           </div>
         </motion.div>

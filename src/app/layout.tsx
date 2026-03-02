@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://bnnr.dev"),
   title: "BNNR — Bulletproof Neural Network Recipe",
   description:
-    "Automate augmentation search for PyTorch vision models. Classification, detection, XAI explainability, and a real-time dashboard.",
+    "Train, explain, improve, and prove PyTorch vision models — with XAI diagnostics, intelligent augmentation, and a real-time dashboard.",
   keywords: [
     "BNNR",
     "PyTorch",
@@ -18,6 +18,10 @@ export const metadata: Metadata = {
     "XAI",
     "explainability",
     "deep learning",
+    "model validation",
+    "model quality",
+    "production-ready",
+    "CV toolkit",
   ],
   icons: {
     icon: [
@@ -30,14 +34,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: "BNNR — Bulletproof Neural Network Recipe",
     description:
-      "Automate augmentation search for PyTorch vision models.",
+      "Train, explain, improve, and prove PyTorch vision models.",
     type: "website",
     images: ["/logos/napis_logo_czarne.PNG"],
   },
   twitter: {
     card: "summary_large_image",
     title: "BNNR — Bulletproof Neural Network Recipe",
-    description: "Automate augmentation search for PyTorch vision models.",
+    description: "Train, explain, improve, and prove PyTorch vision models.",
     images: ["/logos/napis_logo_czarne.PNG"],
   },
 };

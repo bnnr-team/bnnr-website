@@ -84,7 +84,7 @@ export function FeaturesSection() {
           </span>
         </h2>
         <p className="section-subtitle text-center max-w-2xl mx-auto">
-          BNNR combines augmentation search, explainability, and real-time
+          BNNR combines XAI diagnostics, intelligent augmentation, and real-time
           monitoring into a single, cohesive toolkit.
         </p>
 

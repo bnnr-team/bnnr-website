@@ -11,7 +11,7 @@ const LINES = [
   { type: "command", text: "bnnr train --dataset stl10 --with-dashboard" },
   { type: "output", text: "" },
   { type: "output", text: "  ╔══════════════════════════════════════╗" },
-  { type: "output", text: "  ║   BNNR — Augmentation Search v0.1   ║" },
+  { type: "output", text: "  ║  BNNR v0.1 — Train·Explain·Improve  ║" },
   { type: "output", text: "  ╚══════════════════════════════════════╝" },
   { type: "blank", text: "" },
   { type: "output", text: "▸ Dataset:    STL-10 (96×96, 10 classes)" },

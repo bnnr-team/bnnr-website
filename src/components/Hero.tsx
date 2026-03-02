@@ -70,9 +70,9 @@ export function Hero() {
                 </span>
               </h1>
               <p className="text-lg md:text-xl leading-relaxed mb-6" style={{ color: "var(--muted)" }}>
-                Automate augmentation search for PyTorch vision models.
-                Classification, detection, XAI explainability, and a
-                real-time dashboard — all in one package.
+                Make PyTorch vision models production-ready. XAI diagnostics,
+                intelligent augmentation, and evidence-based reporting —
+                in one closed-loop toolkit.
               </p>
 
               {/* Pipeline one-liner */}

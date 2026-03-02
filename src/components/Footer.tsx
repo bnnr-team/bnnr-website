@@ -33,7 +33,7 @@ export function Footer() {
               BNNR
             </div>
             <p className="text-sm mb-4" style={{ color: "var(--muted)" }}>
-              Bulletproof Neural Network Recipe. Automate augmentation search for PyTorch vision models.
+              Bulletproof Neural Network Recipe. Train, explain, improve, and prove PyTorch vision models.
             </p>
             <a
               href="https://github.com/bnnr-team/bnnr"
