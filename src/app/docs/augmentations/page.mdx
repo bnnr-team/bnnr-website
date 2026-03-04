@@ -1,0 +1,307 @@
+# Augmentations and Presets
+
+## What you will find here
+Complete reference for every BNNR augmentation: what it does, when to use it, runtime (GPU/CPU), code examples, and the XAI-driven ICD/AICD system.
+
+## When to use this page
+Use this when selecting augmentation candidates for classification, detection, or multi-label runs, or when you want to understand the XAI-driven augmentation pipeline.
+
+---
+
+## Presets
+
+BNNR ships with ready-to-use augmentation presets. Choose one based on your needs:
+
+| Preset | Augmentations | Best for |
+|--------|-------------|----------|
+| `auto` | Hardware-aware selection | Default — picks GPU or CPU set automatically |
+| `light` | ChurchNoise, ProCAM | Quick experiments, smoke tests |
+| `standard` | ChurchNoise, BasicAug, ProCAM, DifPresets | General-purpose training |
+| `aggressive` | All 8 built-in augmentations | Maximum diversity, robust training |
+| `gpu` | ChurchNoise, ProCAM, DifPresets | Fastest throughput (CUDA required) |
+| `screening` | All 8 with uniform probability | Benchmark-style evaluation |
+
+```python
+from bnnr import auto_select_augmentations, get_preset
+
+augs_auto = auto_select_augmentations(random_state=42)
+augs_std  = get_preset("standard", random_state=42)
+```
+
+CLI `--preset` supports: `auto`, `light`, `standard`, `aggressive`, `gpu`.
+
+---
+
+## Built-in Classification Augmentations
+
+### Noise & Sensor
+
+#### ChurchNoise
+- **Runtime**: GPU-native (CUDA tensor path)
+- **What it does**: Partitions the image into regions using random lines, then applies different noise profiles (white, Gaussian, pink) per region. Simulates spatially-varying sensor noise.
+- **When to use**: When deployment cameras produce variable noise (cheap sensors, low-light conditions, mixed hardware).
+
+```python
+from bnnr.augmentations import ChurchNoise
+
+aug = ChurchNoise(
+    probability=0.5,
+    intensity=0.5,
+    num_lines=3,
+    noise_strength_range=(5.0, 14.0),
+)
+```
+
+#### ProCAM
+- **Runtime**: GPU-native (CUDA tensor path)
+- **What it does**: Simulates camera hardware profiles with white balance shifts and gamma correction. Profiles include: `cheap`, `smartphone`, `pro`, `webcam`, `darkroom`.
+- **When to use**: When training data comes from one camera type but deployment uses different hardware.
+
+```python
+from bnnr.augmentations import ProCAM
+
+aug = ProCAM(probability=0.5)
+```
+
+### Texture & Overlay
+
+#### Drust
+- **Runtime**: CPU (NumPy/OpenCV)
+- **What it does**: Generates multi-layer particle overlays with Gaussian blur, simulating dust, dirt, and debris on a lens or surface.
+- **When to use**: Outdoor or industrial environments — surveillance, manufacturing, agriculture.
+
+```python
+from bnnr.augmentations import Drust
+
+aug = Drust(probability=0.5, intensity=0.5)
+```
+
+#### Smugs
+- **Runtime**: CPU (NumPy/OpenCV)
+- **What it does**: Creates streak-based HSV modifications mimicking fingerprint smudges and grease marks on a lens.
+- **When to use**: Handheld devices, touchscreen kiosks, or any scenario where lens cleanliness varies.
+
+```python
+from bnnr.augmentations import Smugs
+
+aug = Smugs(probability=0.5, intensity=1.5)
+```
+
+#### TeaStains
+- **Runtime**: CPU (NumPy/OpenCV)
+- **What it does**: Applies palette-based stain overlays with texture masks — dried liquid marks, watermarks, or organic blemishes.
+- **When to use**: Document scanning, medical slides, or domains with physical surface artifacts.
+
+```python
+from bnnr.augmentations import TeaStains
+
+aug = TeaStains(probability=0.5, intensity=0.5)
+```
+
+### Distortion & Color
+
+#### LuxferGlass
+- **Runtime**: CPU (NumPy/OpenCV)
+- **What it does**: Grid-based frosted glass distortion with wave effects. Tiles the image and applies localized refraction-like displacement.
+- **When to use**: Images through protective covers, plastic housings, or semi-transparent surfaces — industrial and underwater imaging.
+
+```python
+from bnnr.augmentations import LuxferGlass
+
+aug = LuxferGlass(probability=0.5, intensity=0.5)
+```
+
+#### DifPresets
+- **Runtime**: GPU-native (CUDA tensor path)
+- **What it does**: Places random circles and applies color temperature shifts (warm, cold, vivid, fade, sharpen, blur) inside them.
+- **When to use**: Mixed lighting environments — warm indoor, cold outdoor, artificial light.
+
+```python
+from bnnr.augmentations import DifPresets
+
+aug = DifPresets(probability=0.5, intensity=0.7)
+```
+
+#### BasicAugmentation
+- **Runtime**: CPU (NumPy/OpenCV)
+- **What it does**: Region-based transforms with chromatic aberration or HSV adjustments on random rectangular areas, plus optional global Gaussian blur.
+- **When to use**: General-purpose baseline when you need mild perturbations without domain-specific assumptions.
+
+```python
+from bnnr.augmentations import BasicAugmentation
+
+aug = BasicAugmentation(probability=0.5, intensity=0.5)
+```
+
+---
+
+## XAI-Driven Augmentations: ICD & AICD
+
+ICD and AICD are BNNR's unique XAI-driven augmentations. Unlike standard augmentations that apply random transforms, these use **saliency maps** to intelligently decide *where* to apply masking.
+
+### How it works
+
+1. During training, BNNR computes saliency maps (via OptiCAM or GradCAM) showing which image regions the model focuses on.
+2. The saliency map is divided into tiles (default 8×8 pixels).
+3. A threshold determines which tiles are "high saliency" and which are "low saliency".
+4. ICD or AICD masks the selected tiles with a fill strategy.
+
+### ICD (Intelligent Coarse Dropout)
+- **Masks**: High-saliency tiles (the areas the model focuses on most)
+- **Effect**: Forces the model to learn from contextual features instead of relying on shortcuts
+- **When to use**: When XAI heatmaps show the model over-focusing on one region
+
+```python
+from bnnr.icd import ICD
+
+icd = ICD(
+    model=model,
+    target_layers=[model.layer4[-1]],
+    threshold_percentile=70.0,
+    tile_size=8,
+    fill_strategy="gaussian_blur",  # or: local_mean, global_mean, noise, solid
+    probability=0.5,
+)
+```
+
+### AICD (Anti-ICD)
+- **Masks**: Low-saliency tiles (the background/irrelevant regions)
+- **Effect**: Sharpens the model's attention on genuinely discriminative features
+- **When to use**: When model attention is too diffuse (spread across the whole image)
+
+```python
+from bnnr.icd import AICD
+
+aicd = AICD(
+    model=model,
+    target_layers=[model.layer4[-1]],
+    threshold_percentile=70.0,
+    tile_size=8,
+    fill_strategy="gaussian_blur",
+    probability=0.5,
+)
+```
+
+### Fill strategies
+
+| Strategy | Description |
+|----------|-------------|
+| `gaussian_blur` | Fills masked tiles with a blurred version of the original (default, least disruptive) |
+| `local_mean` | Fills with the mean color of the tile |
+| `global_mean` | Fills with the mean color of the entire image |
+| `noise` | Fills with random noise |
+| `solid` | Fills with a solid color (`fill_value` parameter) |
+
+### XAI Cache
+
+ICD/AICD benefit from the XAI cache system. Saliency maps computed in the Explain phase are cached and reused by ICD/AICD, avoiding recomputation:
+
+```python
+from bnnr.xai_cache import XAICache
+
+cache = XAICache(max_size=5000)
+icd = ICD(model=model, target_layers=layers, cache=cache, probability=0.5)
+```
+
+---
+
+## Detection Augmentations
+
+From `bnnr.detection_augmentations` and `bnnr.detection_icd`:
+
+| Augmentation | Description |
+|-------------|-------------|
+| `DetectionHorizontalFlip` | Horizontal flip with bbox coordinate update |
+| `DetectionVerticalFlip` | Vertical flip with bbox coordinate update |
+| `DetectionRandomRotate90` | 90° rotation with bbox coordinate update |
+| `DetectionRandomScale` | Random scale with bbox coordinate update |
+| `MosaicAugmentation` | 4-image mosaic (YOLOv4-style), combines samples |
+| `DetectionMixUp` | Alpha-blend two images with combined targets |
+| `AlbumentationsBboxAugmentation` | Wraps Albumentations pipelines with BboxParams |
+| `DetectionICD` | ICD for detection (uses bounding boxes as saliency source) |
+| `DetectionAICD` | AICD for detection (uses bounding boxes as saliency source) |
+
+All detection augmentations are bbox-aware and preserve valid box/label structure.
+
+```python
+from bnnr.detection_augmentations import (
+    DetectionHorizontalFlip,
+    DetectionVerticalFlip,
+    MosaicAugmentation,
+)
+from bnnr.detection_icd import DetectionICD
+
+augmentations = [
+    DetectionHorizontalFlip(probability=0.5, random_state=42),
+    DetectionVerticalFlip(probability=0.3, random_state=43),
+    MosaicAugmentation(probability=0.3, random_state=44),
+    DetectionICD(probability=0.3, random_state=45),
+]
+```
+
+---
+
+## Multi-label note
+
+Multi-label tasks use the same augmentation pipeline as classification.
+Selection defaults differ (`f1_samples`), but preset mechanics stay the same.
+
+---
+
+## Optional integrations
+
+### Kornia (`.[gpu]`)
+
+```bash
+pip install "bnnr[gpu]"
+```
+
+Provides GPU-native augmentation paths when available. Recommended for large-scale training.
+
+### Albumentations (`.[albumentations]`)
+
+```bash
+pip install "bnnr[albumentations]"
+```
+
+Used by the bbox-aware wrapper `AlbumentationsBboxAugmentation` for detection tasks.
+
+---
+
+## When to use which augmentation
+
+| Scenario | Recommended |
+|----------|-------------|
+| Quick experiment, first run | `light` preset or `standard` |
+| GPU-only, maximum throughput | `gpu` preset |
+| Full exploration, robustness | `aggressive` preset |
+| Model over-focusing on one region | Add **ICD** |
+| Model attention too diffuse | Add **AICD** |
+| Multiple camera types in deployment | **ProCAM** + **ChurchNoise** |
+| Outdoor/dirty lens conditions | **Drust** + **TeaStains** |
+| Detection with bbox transforms | Detection-specific augmentations |
+| Evaluation of all candidates | `screening` preset |
+
+---
+
+## Custom augmentation registration
+
+Register subclasses of `BaseAugmentation` in `AugmentationRegistry`:
+
+```python
+from bnnr.augmentations import BaseAugmentation, AugmentationRegistry
+import numpy as np
+
+@AugmentationRegistry.register("my_custom_aug")
+class MyCustomAug(BaseAugmentation):
+    def __init__(self, strength: float = 0.5, **kwargs):
+        super().__init__(**kwargs)
+        self.strength = strength
+
+    def apply(self, image: np.ndarray) -> np.ndarray:
+        image = self.validate_input(image)
+        noise = np.random.randint(0, int(255 * self.strength), image.shape, dtype=np.uint8)
+        return np.clip(image.astype(np.int16) + noise, 0, 255).astype(np.uint8)
+```
+
+Keep deterministic behavior via `random_state` where relevant.
