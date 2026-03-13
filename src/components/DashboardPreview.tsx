@@ -11,11 +11,6 @@ const notebooks = [
     link: "https://colab.research.google.com/github/bnnr-team/bnnr/blob/main/examples/classification/bnnr_classification_demo.ipynb",
   },
   {
-    title: "Detection Demo",
-    description: "Detection with Faster R-CNN, mAP, bbox augmentations",
-    link: "https://colab.research.google.com/github/bnnr-team/bnnr/blob/main/examples/detection/bnnr_detection_demo.ipynb",
-  },
-  {
     title: "Augmentations Guide",
     description: "Visual guide to every BNNR augmentation",
     link: "https://colab.research.google.com/github/bnnr-team/bnnr/blob/main/examples/bnnr_augmentations_guide.ipynb",

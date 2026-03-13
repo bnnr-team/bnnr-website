@@ -4,7 +4,7 @@
 Complete reference for every BNNR augmentation: what it does, when to use it, runtime (GPU/CPU), code examples, and the XAI-driven ICD/AICD system.
 
 ## When to use this page
-Use this when selecting augmentation candidates for classification, detection, or multi-label runs, or when you want to understand the XAI-driven augmentation pipeline.
+Use this when selecting augmentation candidates for classification or multi-label runs, or when you want to understand the XAI-driven augmentation pipeline.
 
 ---
 
@@ -205,42 +205,6 @@ icd = ICD(model=model, target_layers=layers, cache=cache, probability=0.5)
 
 ---
 
-## Detection Augmentations
-
-From `bnnr.detection_augmentations` and `bnnr.detection_icd`:
-
-| Augmentation | Description |
-|-------------|-------------|
-| `DetectionHorizontalFlip` | Horizontal flip with bbox coordinate update |
-| `DetectionVerticalFlip` | Vertical flip with bbox coordinate update |
-| `DetectionRandomRotate90` | 90° rotation with bbox coordinate update |
-| `DetectionRandomScale` | Random scale with bbox coordinate update |
-| `MosaicAugmentation` | 4-image mosaic (YOLOv4-style), combines samples |
-| `DetectionMixUp` | Alpha-blend two images with combined targets |
-| `AlbumentationsBboxAugmentation` | Wraps Albumentations pipelines with BboxParams |
-| `DetectionICD` | ICD for detection (uses bounding boxes as saliency source) |
-| `DetectionAICD` | AICD for detection (uses bounding boxes as saliency source) |
-
-All detection augmentations are bbox-aware and preserve valid box/label structure.
-
-```python
-from bnnr.detection_augmentations import (
-    DetectionHorizontalFlip,
-    DetectionVerticalFlip,
-    MosaicAugmentation,
-)
-from bnnr.detection_icd import DetectionICD
-
-augmentations = [
-    DetectionHorizontalFlip(probability=0.5, random_state=42),
-    DetectionVerticalFlip(probability=0.3, random_state=43),
-    MosaicAugmentation(probability=0.3, random_state=44),
-    DetectionICD(probability=0.3, random_state=45),
-]
-```
-
----
-
 ## Multi-label note
 
 Multi-label tasks use the same augmentation pipeline as classification.
@@ -264,7 +228,7 @@ Provides GPU-native augmentation paths when available. Recommended for large-sca
 pip install "bnnr[albumentations]"
 ```
 
-Used by the bbox-aware wrapper `AlbumentationsBboxAugmentation` for detection tasks.
+Provides additional augmentation pipelines when needed.
 
 ---
 
@@ -279,7 +243,6 @@ Used by the bbox-aware wrapper `AlbumentationsBboxAugmentation` for detection ta
 | Model attention too diffuse | Add **AICD** |
 | Multiple camera types in deployment | **ProCAM** + **ChurchNoise** |
 | Outdoor/dirty lens conditions | **Drust** + **TeaStains** |
-| Detection with bbox transforms | Detection-specific augmentations |
 | Evaluation of all candidates | `screening` preset |
 
 ---

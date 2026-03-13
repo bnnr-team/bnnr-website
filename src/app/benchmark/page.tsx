@@ -46,7 +46,7 @@ export default function BenchmarkPage() {
         >
           <FlaskConical size={18} style={{ color: "var(--accent)" }} />
           <span className="text-sm" style={{ color: "var(--muted)" }}>
-            Classification, detection, and multi-label benchmarks in progress
+            Classification and multi-label benchmarks in progress
           </span>
         </div>
 

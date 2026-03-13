@@ -22,9 +22,9 @@ const features = [
   },
   {
     icon: <Crosshair size={24} />,
-    title: "Classification + Detection",
+    title: "Classification + Multi-label",
     description:
-      "Same workflow for both tasks. Accuracy for classification, mAP for detection. Bbox-aware augmentations automatically update coordinates.",
+      "Same workflow for both tasks. Accuracy for classification, per-class metrics for multi-label. Task-specific augmentations and metrics.",
     phase: "Train",
   },
   {

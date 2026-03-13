@@ -55,55 +55,6 @@ result = quick_run(
 print(f"Best accuracy: {result.best_metrics}")
 print(f"Aug path:      {result.best_path}")`,
   },
-  detection: {
-    title: "Detection",
-    description:
-      "Object detection with Faster R-CNN and bbox-aware augmentations. Augmentations automatically update bounding box coordinates.",
-    code: `# pip install "bnnr[dashboard]"
-from bnnr import BNNRConfig, BNNRTrainer
-from bnnr.detection_adapter import DetectionAdapter
-from bnnr.detection_augmentations import (
-    DetectionHorizontalFlip,
-    DetectionVerticalFlip,
-)
-from torchvision.models.detection import fasterrcnn_resnet50_fpn_v2
-import torch
-
-model = fasterrcnn_resnet50_fpn_v2(weights="DEFAULT", num_classes=21)
-
-adapter = DetectionAdapter(
-    model=model,
-    optimizer=torch.optim.SGD(
-        model.parameters(), lr=0.005, momentum=0.9
-    ),
-    device="cuda",
-)
-
-augmentations = [
-    DetectionHorizontalFlip(probability=0.5, random_state=42),
-    DetectionVerticalFlip(probability=0.3, random_state=43),
-]
-
-config = BNNRConfig(
-    task="detection",
-    m_epochs=3,
-    max_iterations=3,
-    device="cuda",
-    xai_enabled=True,
-    detection_class_names=[
-        "aeroplane", "bicycle", "bird", "boat", "bottle",
-        "bus", "car", "cat", "chair", "cow",
-        "diningtable", "dog", "horse", "motorbike", "person",
-        "pottedplant", "sheep", "sofa", "train", "tvmonitor",
-    ],
-)
-
-trainer = BNNRTrainer(
-    adapter, train_loader, val_loader,
-    augmentations, config,
-)
-result = trainer.run()`,
-  },
   icd_aicd: {
     title: "ICD / AICD",
     description:

@@ -28,7 +28,7 @@ const teamMembers = [
   {
     name: "Diana Morzhak",
     role: "Software Developer & QA Engineer",
-    bio: "Responsible for feature development, quality assurance, and end-to-end testing — ensuring reliability across classification and detection workflows.",
+    bio: "Responsible for feature development, quality assurance, and end-to-end testing — ensuring reliability across classification workflows.",
     avatar: "/team/diana.jpg",
     links: {},
   },
@@ -96,9 +96,8 @@ export default function TeamPage() {
               <strong style={{ color: "var(--fg)" }}> real-time dashboard</strong> for monitoring the entire pipeline.
             </p>
             <p>
-              BNNR supports <strong style={{ color: "var(--fg)" }}>classification</strong>,
-              <strong style={{ color: "var(--fg)" }}> object detection</strong>, and
-              <strong style={{ color: "var(--fg)" }}> multi-label classification</strong> tasks, with bbox-aware augmentations and
+              BNNR supports <strong style={{ color: "var(--fg)" }}>classification</strong> and
+              <strong style={{ color: "var(--fg)" }}> multi-label classification</strong> tasks with
               task-specific metrics.
             </p>
           </div>

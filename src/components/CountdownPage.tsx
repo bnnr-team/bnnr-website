@@ -26,8 +26,16 @@ function getTimeLeft(): TimeLeft {
   };
 }
 
-function CountdownUnit({ value, label }: { value: number; label: string }) {
-  const display = String(value).padStart(2, "0");
+function CountdownUnit({
+  value,
+  label,
+  mounted,
+}: {
+  value: number;
+  label: string;
+  mounted: boolean;
+}) {
+  const display = mounted ? String(value).padStart(2, "0") : "00";
 
   return (
     <div className="flex flex-col items-center">
@@ -49,7 +57,7 @@ function CountdownUnit({ value, label }: { value: number; label: string }) {
         />
         <AnimatePresence mode="popLayout">
           <motion.span
-            key={value}
+            key={mounted ? value : "ssr"}
             initial={{ y: -20, opacity: 0, scale: 0.8 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 20, opacity: 0, scale: 0.8 }}
@@ -301,28 +309,28 @@ export function CountdownPage() {
           transition={{ delay: 0.9, duration: 0.6 }}
           className="flex gap-3 sm:gap-5 mb-10"
         >
-          <CountdownUnit value={timeLeft.days} label="Days" />
+          <CountdownUnit value={timeLeft.days} label="Days" mounted={mounted} />
           <div
             className="flex items-center text-2xl sm:text-3xl font-bold self-start mt-6 sm:mt-7"
             style={{ color: "var(--accent)" }}
           >
             :
           </div>
-          <CountdownUnit value={timeLeft.hours} label="Hours" />
+          <CountdownUnit value={timeLeft.hours} label="Hours" mounted={mounted} />
           <div
             className="flex items-center text-2xl sm:text-3xl font-bold self-start mt-6 sm:mt-7"
             style={{ color: "var(--accent)" }}
           >
             :
           </div>
-          <CountdownUnit value={timeLeft.minutes} label="Min" />
+          <CountdownUnit value={timeLeft.minutes} label="Min" mounted={mounted} />
           <div
             className="flex items-center text-2xl sm:text-3xl font-bold self-start mt-6 sm:mt-7"
             style={{ color: "var(--accent)" }}
           >
             :
           </div>
-          <CountdownUnit value={timeLeft.seconds} label="Sec" />
+          <CountdownUnit value={timeLeft.seconds} label="Sec" mounted={mounted} />
         </motion.div>
 
         {/* Pipeline steps */}

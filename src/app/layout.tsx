@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { Navbar } from "@/components/Navbar";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bnnr.dev"),
-  title: "BNNR — Launching Soon",
+  title: "BNNR — Bulletproof Neural Network Recipe",
   description:
-    "BNNR is launching soon. Train, explain, improve, and prove PyTorch vision models — with XAI diagnostics, intelligent augmentation, and a real-time dashboard.",
+    "Make PyTorch vision models production-ready. Train, explain, improve, and prove — with XAI diagnostics, intelligent augmentation, and a real-time dashboard.",
   keywords: [
     "BNNR",
     "PyTorch",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     "XAI",
     "explainability",
     "deep learning",
-    "launching soon",
+    "production-ready",
   ],
   icons: {
     icon: [
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "BNNR — Launching Soon",
+    title: "BNNR — Bulletproof Neural Network Recipe",
     description:
       "Train, explain, improve, and prove PyTorch vision models.",
     type: "website",
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "BNNR — Launching Soon",
+    title: "BNNR — Bulletproof Neural Network Recipe",
     description: "Train, explain, improve, and prove PyTorch vision models.",
     images: ["/logos/napis_logo_czarne.PNG"],
   },
@@ -56,6 +57,7 @@ export default function RootLayout({
       </head>
       <body className="molecular-bg">
         <ThemeProvider>
+          <Navbar />
           <main className="relative z-10">{children}</main>
         </ThemeProvider>
       </body>
