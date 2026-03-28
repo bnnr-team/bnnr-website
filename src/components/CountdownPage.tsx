@@ -6,7 +6,7 @@ import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Rocket } from "lucide-react";
 
-const LAUNCH_DATE = new Date("2026-03-31T18:00:00Z");
+const LAUNCH_DATE = new Date("2026-04-02T08:00:00+02:00");
 
 interface TimeLeft {
   days: number;
