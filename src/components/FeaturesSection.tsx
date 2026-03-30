@@ -22,9 +22,9 @@ const features = [
   },
   {
     icon: <Crosshair size={24} />,
-    title: "Classification + Detection",
+    title: "Image classification",
     description:
-      "Same workflow for both tasks. Accuracy for classification, mAP for detection. Bbox-aware augmentations automatically update coordinates.",
+      "End-to-end workflow from baseline training to stakeholder-ready reports, metrics, and dashboard views.",
     phase: "Train",
   },
   {

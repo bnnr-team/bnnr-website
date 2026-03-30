@@ -16,39 +16,11 @@ result = quick_run(
 print(f"Best: {result.best_metrics}")
 # Best: {'accuracy': 0.847, 'f1_macro': 0.845}`;
 
-const DETECTION_CODE = `from bnnr import BNNRConfig, BNNRTrainer
-from bnnr.detection_adapter import DetectionAdapter
-from bnnr.detection_augmentations import (
-    DetectionHorizontalFlip, DetectionVerticalFlip
-)
-
-adapter = DetectionAdapter(
-    model=my_fasterrcnn,
-    optimizer=optimizer,
-    device="cuda",
-)
-
-config = BNNRConfig(
-    task="detection",
-    m_epochs=3,
-    max_iterations=3,
-)
-# Auto-sets: selection_metric="map_50"
-
-trainer = BNNRTrainer(
-    adapter, train_loader, val_loader,
-    augmentations, config,
-)
-result = trainer.run()`;
-
 export function CodeShowcase() {
-  const [tab, setTab] = useState<"classification" | "detection">("classification");
   const [copied, setCopied] = useState(false);
 
-  const code = tab === "classification" ? CLASSIFICATION_CODE : DETECTION_CODE;
-
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(code);
+    await navigator.clipboard.writeText(CLASSIFICATION_CODE);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -64,47 +36,14 @@ export function CodeShowcase() {
           API
         </h2>
         <p className="section-subtitle text-center max-w-2xl mx-auto">
-          Whether you&apos;re doing image classification or object detection,
-          BNNR adapts to your workflow with minimal code.
+          Train image classifiers with a minimal, consistent API — from baseline to
+          augmentation search and live monitoring.
         </p>
 
         <div className="max-w-3xl mx-auto">
-          {/* Tabs */}
-          <div className="flex gap-1 mb-4">
-            <button
-              onClick={() => setTab("classification")}
-              className={`px-4 py-2 rounded-t-lg text-sm font-medium transition-colors ${
-                tab === "classification"
-                  ? "text-[var(--accent)]"
-                  : "text-[var(--muted)] hover:text-[var(--fg)]"
-              }`}
-              style={{
-                background: tab === "classification" ? "var(--code-bg)" : "transparent",
-                borderBottom: tab === "classification" ? "2px solid var(--accent)" : "2px solid transparent",
-              }}
-            >
-              Classification
-            </button>
-            <button
-              onClick={() => setTab("detection")}
-              className={`px-4 py-2 rounded-t-lg text-sm font-medium transition-colors ${
-                tab === "detection"
-                  ? "text-[var(--accent)]"
-                  : "text-[var(--muted)] hover:text-[var(--fg)]"
-              }`}
-              style={{
-                background: tab === "detection" ? "var(--code-bg)" : "transparent",
-                borderBottom: tab === "detection" ? "2px solid var(--accent)" : "2px solid transparent",
-              }}
-            >
-              Detection
-            </button>
-          </div>
-
-          {/* Code block */}
           <div className="relative group">
             <pre className="!rounded-tl-none">
-              <code className="text-sm leading-relaxed">{code}</code>
+              <code className="text-sm leading-relaxed">{CLASSIFICATION_CODE}</code>
             </pre>
             <button
               onClick={handleCopy}

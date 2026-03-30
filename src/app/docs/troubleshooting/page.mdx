@@ -38,22 +38,10 @@ Cause:
 Applies to:
 
 - `imagefolder`
-- `coco_mini`
-- `yolo`
 
 Fix: pass `--data-path`.
 
-## 4) `Could not find YOLO data.yaml`
-
-Cause:
-
-- `--data-path` does not point to a `data.yaml` file or a directory containing it.
-
-Fix:
-
-- validate path and required `train`/`val` entries in YAML.
-
-## 5) Dashboard shows zero runs
+## 4) Dashboard shows zero runs
 
 Cause:
 
@@ -64,7 +52,7 @@ Fix:
 - use a parent folder containing `run_*` directories, or
 - point directly at a run directory that has `events.jsonl`.
 
-## 6) CI on Python 3.9 fails with `unsupported operand type(s) for |`
+## 5) CI on Python 3.9 fails with `unsupported operand type(s) for |`
 
 Cause:
 
@@ -75,7 +63,7 @@ Fix:
 - keep compatible annotations in runtime-introspected paths,
 - keep dependency `eval-type-backport` for `python < 3.10`.
 
-## 7) CI/test import error: `ModuleNotFoundError: No module named 'httpx'`
+## 6) CI/test import error: `ModuleNotFoundError: No module named 'httpx'`
 
 Cause:
 
@@ -85,7 +73,7 @@ Fix:
 
 - include `httpx` in test/dev dependencies.
 
-## 8) `pip install -e ".[dashboard]"` or `python -m build` fails in restricted environments
+## 7) `pip install -e ".[dashboard]"` or `python -m build` fails in restricted environments
 
 Cause:
 
@@ -96,7 +84,7 @@ Fix:
 - in restricted/offline environments, use prepared build env and `python -m build --no-isolation`,
 - in GitHub CI (network-enabled), standard `python -m build` should work.
 
-## 9) CUDA appears unavailable
+## 8) CUDA appears unavailable
 
 Check:
 
@@ -108,7 +96,7 @@ Fix:
 
 - install CUDA-compatible PyTorch build for your OS/driver.
 
-## 10) Augmentation instability on grayscale datasets
+## 9) Augmentation instability on grayscale datasets
 
 Symptom:
 
@@ -119,7 +107,7 @@ Fix:
 - start with RGB datasets for preset stress tests,
 - keep grayscale smoke runs minimal and conservative.
 
-## 11) `python3 -m venv` fails with `ensurepip is not available`
+## 10) `python3 -m venv` fails with `ensurepip is not available`
 
 Cause:
 
@@ -130,7 +118,7 @@ Fix:
 - install system venv package (for example `python3.12-venv` on Ubuntu),
 - recreate the virtual environment and continue quickstart steps.
 
-## 12) QR code is visible but dashboard does not open on phone
+## 11) QR code is visible but dashboard does not open on phone
 
 Cause:
 

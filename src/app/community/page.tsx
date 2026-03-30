@@ -20,18 +20,13 @@ const notebooks = [
     link: "https://colab.research.google.com/github/bnnr-team/bnnr/blob/main/examples/classification/bnnr_classification_demo.ipynb",
   },
   {
-    title: "Detection Demo",
-    description: "Object detection with Faster R-CNN, mAP metrics, and bbox-aware augmentations.",
-    link: "https://colab.research.google.com/github/bnnr-team/bnnr/blob/main/examples/detection/bnnr_detection_demo.ipynb",
-  },
-  {
     title: "Augmentations Guide",
     description: "Visual walkthrough of every BNNR augmentation with ICD/AICD deep-dive.",
     link: "https://colab.research.google.com/github/bnnr-team/bnnr/blob/main/examples/bnnr_augmentations_guide.ipynb",
   },
   {
     title: "Custom Data",
-    description: "Bring your own images using ImageFolder or YOLO format.",
+    description: "Bring your own images using an ImageFolder-style layout.",
     link: "https://colab.research.google.com/github/bnnr-team/bnnr/blob/main/examples/bnnr_custom_data.ipynb",
   },
 ];
@@ -206,7 +201,7 @@ mypy src/bnnr/`}</code>
                 {[
                   "New augmentations",
                   "Additional XAI methods",
-                  "Detection model adapters",
+                  "Model adapter integrations",
                   "Dashboard enhancements",
                   "Documentation improvements",
                   "Example notebooks",
