@@ -97,6 +97,14 @@ def _apply_batch_single(aug, img: np.ndarray) -> np.ndarray:
     return np.asarray(out[0])
 
 
+def _procam_gallery_strong(img: np.ndarray, random_state: int) -> np.ndarray:
+    """Stack two ProCAM passes — intensity≥1.0 skips blending in BNNR, so a single
+    pass is already 100% augmented; stacking makes the color cast obvious in previews."""
+    first = ProCAM(probability=1.0, intensity=1.0, random_state=random_state)
+    second = ProCAM(probability=1.0, intensity=1.0, random_state=random_state + 791)
+    return _apply_batch_single(second, _apply_batch_single(first, img))
+
+
 def _saliency_overlay(
     img: np.ndarray,
     label: int,
@@ -165,11 +173,6 @@ def main() -> None:
                 noise_strength_range=(12.0, 32.0),
                 random_state=s,
             ),
-            "procam": lambda s=base_seed + 2: ProCAM(
-                probability=1.0,
-                intensity=1.85,
-                random_state=s,
-            ),
             "drust": lambda s=base_seed + 3: Drust(
                 probability=1.0,
                 intensity=2.0,
@@ -212,6 +215,16 @@ def main() -> None:
                 random_state=s,
             ),
         }
+        aug_order = (
+            "church_noise",
+            "procam",
+            "drust",
+            "smugs",
+            "tea_stains",
+            "luxfer_glass",
+            "dif_presets",
+            "basic_augmentation",
+        )
 
         label = IMAGENET_LABEL[domain]
         sal = _saliency_overlay(
@@ -247,9 +260,12 @@ def main() -> None:
             random_state=base_seed + 91,
         )
 
-        for aid, factory in augs.items():
-            aug = factory()
-            out = _apply_batch_single(aug, rgb)
+        for aid in aug_order:
+            if aid == "procam":
+                out = _procam_gallery_strong(rgb, base_seed + 2)
+            else:
+                aug = augs[aid]()
+                out = _apply_batch_single(aug, rgb)
             path = PLAYGROUND_DIR / f"{domain}_{aid}.png"
             cv2.imwrite(str(path), cv2.cvtColor(out, cv2.COLOR_RGB2BGR))
             print(f"  wrote {path.name}")

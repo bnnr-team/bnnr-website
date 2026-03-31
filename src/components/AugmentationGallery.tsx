@@ -53,7 +53,7 @@ const allAugmentations: AugmentationType[] = [
     runtime: "GPU",
     tagline: "Camera hardware simulation",
     description:
-      "Simulates different camera hardware profiles by applying white balance shifts and gamma correction. Built-in profiles: cheap, smartphone, pro, webcam, darkroom. Runs on CUDA tensors for maximum throughput. Previews use bnnr.augmentations.ProCAM (probability=1.0, intensity=1.85) so the color shift reads clearly in the gallery.",
+      "Simulates different camera hardware profiles by applying white balance shifts and gamma correction. Built-in profiles: cheap, smartphone, pro, webcam, darkroom. Runs on CUDA tensors for maximum throughput. Gallery previews stack two ProCAM passes (probability=1.0 each, distinct random seeds) because a single pass is already fully replaced at intensity ≥ 1.0 in BNNR — stacking makes the color cast clearly visible.",
     benefit:
       "Useful when training data comes from one camera family but deployment spans different white balance, gamma, and color response — it encourages invariance to those shifts.",
   },
