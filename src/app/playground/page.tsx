@@ -35,19 +35,58 @@ export default function PlaygroundPage() {
         <CodePlayground />
       </section>
 
-      <p className="text-center text-xs max-w-2xl mx-auto pb-8" style={{ color: "var(--muted)" }}>
-        Sample photos and generated previews: licensing notes and saliency model credits are summarized in{" "}
-        <a
-          href="https://github.com/bnnr-team/bnnr-website/blob/main/public/playground/ATTRIBUTION.md"
-          className="underline hover:opacity-80"
-          style={{ color: "var(--accent)" }}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          playground/ATTRIBUTION.md
-        </a>
-        .
-      </p>
+      <div
+        className="text-center text-xs max-w-3xl mx-auto pb-8 space-y-3"
+        style={{ color: "var(--muted)" }}
+      >
+        <p>
+          <strong style={{ color: "var(--fg)" }}>Photo credits (base images).</strong>{" "}
+          <em>Urban Traffic:</em> © Countryball mys123,{" "}
+          <a
+            href="https://creativecommons.org/licenses/by/4.0/"
+            className="underline hover:opacity-80"
+            style={{ color: "var(--accent)" }}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            CC BY 4.0
+          </a>
+          ; cropped to 512×512;{" "}
+          <a
+            href="https://commons.wikimedia.org/wiki/File:Malaysia_Federal_Highway_Traffic_Jam.jpg"
+            className="underline hover:opacity-80"
+            style={{ color: "var(--accent)" }}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            original on Wikimedia Commons
+          </a>
+          . <em>Underwater Marine:</em> Jim Maragos, U.S. Fish and Wildlife Service, public domain; cropped;{" "}
+          <a
+            href="https://commons.wikimedia.org/wiki/File:Coral_reef_fish_pacific_blue_tan_paracanthurus_hepatus.jpg"
+            className="underline hover:opacity-80"
+            style={{ color: "var(--accent)" }}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            original on Wikimedia Commons
+          </a>
+          . Augmented previews are generated with BNNR; saliency uses torchvision ResNet-18 weights.
+        </p>
+        <p>
+          Full detail:{" "}
+          <a
+            href="https://github.com/bnnr-team/bnnr-website/blob/main/public/playground/ATTRIBUTION.md"
+            className="underline hover:opacity-80"
+            style={{ color: "var(--accent)" }}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            playground/ATTRIBUTION.md
+          </a>
+          .
+        </p>
+      </div>
     </div>
   );
 }

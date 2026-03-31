@@ -10,9 +10,12 @@ The two base images (`vehicle_original.png`, `fish_original.png`) are downscaled
 | --- | --- |
 | **File** | Malaysia Federal Highway Traffic Jam |
 | **Description** | Traffic jam at Federal Highway (Malaysia) |
+| **Copyright** | © Countryball mys123; [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Malaysia_Federal_Highway_Traffic_Jam.jpg) |
 | **Author** | [Countryball mys123](https://commons.wikimedia.org/wiki/User:Countryball_mys123) |
 | **Source** | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Malaysia_Federal_Highway_Traffic_Jam.jpg) |
 | **License** | **CC BY 4.0** — [https://creativecommons.org/licenses/by/4.0](https://creativecommons.org/licenses/by/4.0) |
+
+**Derivative on this site:** The image is resized and center-cropped to 512×512 for the gallery; augmented PNGs are further transformed by BNNR. CC BY 4.0 requires **attribution** and a **link to the license** when you share the original or substantial derivatives; see the license text for full terms.
 
 You must retain attribution when reusing the **original photograph**; the BNNR-generated augmentation outputs are separate pixel layers produced by our script.
 
@@ -21,7 +24,7 @@ You must retain attribution when reusing the **original photograph**; the BNNR-g
 | Field | Value |
 | --- | --- |
 | **File** | Coral reef fish pacific blue tan paracanthurus hepatus |
-| **Author** | Jim Maragos, U.S. Fish and Wildlife Service |
+| **Credit** | Jim Maragos, U.S. Fish and Wildlife Service (no copyright assertion under U.S. law for this federal work) |
 | **Source** | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Coral_reef_fish_pacific_blue_tan_paracanthurus_hepatus.jpg) |
 | **License** | **Public domain** (U.S. federal government work) |
 
