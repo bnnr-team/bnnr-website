@@ -36,8 +36,15 @@ export function DashboardPreview() {
           Monitor your training live with branch decision trees, metrics charts,
           augmentation previews, and XAI insights — all from your browser or phone.
         </p>
+        <p className="text-center text-xs max-w-xl mx-auto -mt-4 mb-6" style={{ color: "var(--muted)" }}>
+          Preview below mirrors the{" "}
+          <span className="font-medium" style={{ color: "var(--fg)" }}>
+            real dashboard KPI layout
+          </span>{" "}
+          (sample numbers only — your session shows live metrics).
+        </p>
 
-        {/* Dashboard mockup */}
+        {/* Dashboard mockup — structure matches bnnr/dashboard_web overview KPI row */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -59,17 +66,27 @@ export function DashboardPreview() {
             </div>
           </div>
 
-          {/* Dashboard content simulation */}
+          {/* Dashboard content — same KPI labels as dashboard_web App.tsx overview */}
           <div className="p-6 md:p-8">
-            <div className="grid md:grid-cols-3 gap-4 mb-6">
-              {[
-                { label: "Selection metric", value: "—", highlight: true },
-                { label: "Baseline", value: "—" },
-                { label: "Δ vs baseline", value: "—", highlight: true },
-              ].map((kpi) => (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-5">
+              {(
+                [
+                  { label: "Best Accuracy ★", value: "94.1%", highlight: true as const },
+                  { label: "Current Accuracy", value: "91.2%", highlight: false as const },
+                  { label: "Best F1 (macro) ★", value: "89.8%", highlight: true as const },
+                  {
+                    label: "BNNR Gain vs Baseline",
+                    value: "+2.8pp",
+                    highlight: false as const,
+                    valueColor: "var(--accent)" as const,
+                  },
+                  { label: "Decisions Made", value: "6", highlight: false as const },
+                  { label: "Branches Evaluated", value: "9", highlight: false as const },
+                ] as const
+              ).map((kpi) => (
                 <div
                   key={kpi.label}
-                  className="rounded-bnnr p-4 text-center"
+                  className="rounded-bnnr p-3 text-center min-w-0"
                   style={{
                     background: kpi.highlight
                       ? "rgba(240, 160, 105, 0.08)"
@@ -79,16 +96,79 @@ export function DashboardPreview() {
                       : "1px solid var(--border-subtle)",
                   }}
                 >
-                  <div className="text-2xl font-bold" style={{
-                    color: kpi.highlight ? "var(--accent)" : "var(--fg)",
-                  }}>
+                  <div
+                    className="text-lg sm:text-xl font-extrabold leading-tight tabular-nums"
+                    style={{
+                      color:
+                        "valueColor" in kpi
+                          ? kpi.valueColor
+                          : kpi.highlight
+                            ? "var(--accent)"
+                            : "var(--fg)",
+                    }}
+                  >
                     {kpi.value}
                   </div>
-                  <div className="text-xs mt-1" style={{ color: "var(--muted)" }}>
+                  <div
+                    className="text-[10px] sm:text-[11px] mt-1.5 uppercase tracking-wide leading-snug"
+                    style={{ color: "var(--muted)" }}
+                  >
                     {kpi.label}
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Stylized chart strip (suggests Training Progress + branch markers, not fake data) */}
+            <div
+              className="rounded-bnnr p-4 mb-6"
+              style={{
+                background: "var(--code-bg)",
+                border: "1px solid var(--border-subtle)",
+              }}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: "var(--muted)" }}>
+                  Training progress (selected path)
+                </span>
+                <span className="text-[10px]" style={{ color: "var(--muted)" }}>
+                  accuracy · F1 · loss
+                </span>
+              </div>
+              <svg
+                className="w-full h-16 sm:h-20"
+                viewBox="0 0 400 80"
+                preserveAspectRatio="none"
+                aria-hidden
+              >
+                <line x1="0" y1="60" x2="400" y2="60" stroke="var(--border-subtle)" strokeWidth="1" />
+                <path
+                  d="M 0 52 L 40 48 L 80 44 L 120 38 L 160 35 L 200 32 L 240 28 L 280 26 L 320 22 L 360 18 L 400 14"
+                  fill="none"
+                  stroke="rgba(34, 197, 94, 0.85)"
+                  strokeWidth="2"
+                  vectorEffect="non-scaling-stroke"
+                />
+                <path
+                  d="M 0 58 L 60 54 L 120 50 L 180 42 L 240 36 L 300 30 L 360 24 L 400 20"
+                  fill="none"
+                  stroke="rgba(59, 130, 246, 0.75)"
+                  strokeWidth="1.5"
+                  vectorEffect="non-scaling-stroke"
+                />
+                {[100, 200, 300].map((x) => (
+                  <line
+                    key={x}
+                    x1={x}
+                    y1="8"
+                    x2={x}
+                    y2="72"
+                    stroke="rgba(240, 160, 105, 0.35)"
+                    strokeWidth="1"
+                    strokeDasharray="4 4"
+                  />
+                ))}
+              </svg>
             </div>
 
             {/* Feature highlights */}
