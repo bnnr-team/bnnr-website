@@ -19,7 +19,7 @@ BNNR ships with ready-to-use augmentation presets. Choose one based on your need
 | `standard` | ChurchNoise, BasicAug, ProCAM, DifPresets | General-purpose training |
 | `aggressive` | All 8 built-in augmentations | Maximum diversity, robust training |
 | `gpu` | ChurchNoise, ProCAM, DifPresets | Fastest throughput (CUDA required) |
-| `screening` | All 8 with uniform probability | Benchmark-style evaluation |
+| `screening` | Same pool as aggressive, uniform probability | API helper for uniform exploration (not exposed as a CLI `--preset`) |
 
 ```python
 from bnnr import auto_select_augmentations, get_preset
@@ -243,7 +243,7 @@ Optional bridge for Albumentations-based pipelines when you install the extra.
 | Model attention too diffuse | Add **AICD** |
 | Multiple camera types in deployment | **ProCAM** + **ChurchNoise** |
 | Outdoor/dirty lens conditions | **Drust** + **TeaStains** |
-| Evaluation of all candidates | `screening` preset |
+| Uniform sampling over the full built-in pool | `screening` (Python API) |
 
 ---
 

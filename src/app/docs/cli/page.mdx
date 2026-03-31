@@ -25,6 +25,10 @@ python3 -m bnnr train --config CONFIG [OPTIONS]
 - `cifar10`
 - `imagefolder`
 
+### Multi-label classification
+
+`bnnr train` with any of the datasets above always builds **single-label** pipelines (`CrossEntropyLoss`, one class index per sample). Setting `task: multilabel` in your config YAML **does not** change that behavior. For multi-label, use the Python API ([Golden Path](/docs/golden-path/)) or the scripts under `examples/multilabel/` ([Examples Guide](/docs/examples/)).
+
 ### Main options
 
 - `--config, -c` (required)
@@ -74,11 +78,13 @@ python3 -m bnnr train \
 ```bash
 python3 -m bnnr report path/to/report.json --format summary
 python3 -m bnnr report path/to/report.json --format json
+python3 -m bnnr report path/to/report.json --format json --output report_payload.json
 ```
 
 Notes:
 
 - `--format html` is intentionally rejected in current CLI.
+- `--output` writes rendered report output to file (summary text or JSON payload).
 - Use dashboard export for static HTML output.
 
 ## Dashboard commands
@@ -106,7 +112,7 @@ python3 -m bnnr dashboard export --run-dir reports/run_YYYYMMDD_HHMMSS --out exp
 - `dashboard serve` prints both Local URL and Network URL plus terminal QR code.
 - Open Local URL on desktop first, then use QR from phone on the same network.
 - For secured controls, use `--token` (or `BNNR_DASHBOARD_TOKEN`).
-- For production workflow details (pause/resume, mobile access, export), see the [Dashboard Guide](/docs/dashboard/).
+- For production workflow details (pause/resume, mobile access, export), see [Dashboard Guide](/docs/dashboard/).
 
 ## Utility commands
 

@@ -18,7 +18,7 @@ This guide covers all user notebooks in `examples/` and how to run them in a way
 3. `multilabel/bnnr_multilabel_demo.ipynb`
 4. `bnnr_custom_data.ipynb`
 
-This order gives fastest understanding: augmentations → core training loop → task variants → custom integration.
+This order gives fastest understanding: augmentations -> core training loop -> task variants -> custom integration.
 
 ## Local setup
 
@@ -26,8 +26,8 @@ This order gives fastest understanding: augmentations → core training loop →
 python3 -m venv /tmp/bnnr-nb-venv
 source /tmp/bnnr-nb-venv/bin/activate
 python -m pip install --upgrade pip
-pip install "bnnr[dashboard]"
-pip install jupyter nbconvert
+python -m pip install -e ".[dashboard]"
+python -m pip install jupyter nbconvert
 ```
 
 Run:
@@ -38,12 +38,12 @@ jupyter lab
 
 ## Colab setup (recommended for first run)
 1. Open notebook via the “Open in Colab” badge.
-2. Runtime → Change runtime type → GPU (recommended for larger models and longer runs).
+2. Runtime -> Change runtime type -> GPU (recommended for larger runs).
 3. Run installation cell first (`%pip install -q "bnnr[dashboard]" ...`).
 4. Run cells top-to-bottom without skipping.
 
 ## Dashboard-first workflow (desktop + mobile)
-For classification and multilabel notebooks:
+For classification/multilabel notebooks:
 1. Run dashboard section **before** training.
 2. Confirm local dashboard URL appears.
 3. On Colab, confirm iframe is rendered.
@@ -65,7 +65,7 @@ After each run verify:
 - `events.jsonl` exists,
 - task metrics are present:
   - classification: `accuracy`, `f1_*`,
-  - multilabel: `f1_samples`, `fbeta_*`.
+  - multilabel: `f1_samples`, `fbeta_*`,
 
 Optional replay/export checks:
 
@@ -76,7 +76,7 @@ python3 -m bnnr dashboard export --run-dir <run_dir> --out /tmp/exported_dashboa
 
 ## Quality notes from notebook audit
 During B11 notebook hardening, the following were normalized:
-- valid Colab links to `bnnr-team/bnnr`,
+- valid Colab links to `mateuszwalo/BNNR`,
 - modern CLI examples (`python3 -m bnnr ...`, no legacy `bnnr.cli`),
 - kernelspec metadata set to `python3`,
 - dashboard cells aligned for local + Colab + optional mobile flow,
@@ -84,7 +84,6 @@ During B11 notebook hardening, the following were normalized:
 
 ## Common pitfalls
 - Missing `jupyter`/`nbconvert` locally.
-- Expecting full training runs to finish quickly on CPU without reducing epochs or sample counts.
 - Forgetting to keep `events.jsonl` (required for replay/export).
 
 For concrete fixes, see [Troubleshooting](/docs/troubleshooting/).

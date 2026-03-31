@@ -4,7 +4,6 @@ import { Github } from "lucide-react";
 const footerLinks = {
   Product: [
     { label: "Getting Started", href: "/docs/getting-started/" },
-    { label: "Benchmark", href: "/benchmark/" },
     { label: "Playground", href: "/playground/" },
     { label: "Community", href: "/community/" },
   ],

@@ -153,9 +153,7 @@ trainer = BNNRTrainer(
 ## Task-specific fields
 
 ### `task: classification` (default)
-- `task` (default: `classification`, valid: `classification|multilabel`)
-
-No extra required fields beyond the core training fields.
+No extra required fields.
 
 ### `task: multilabel`
 - `multilabel_threshold` (default: `0.5`, validated to `(0,1)`)
@@ -171,3 +169,5 @@ task: multilabel
 selection_metric: fbeta_0.5
 metrics: [fbeta_0.5, f1_samples, accuracy, loss]
 ```
+
+**CLI note:** `python -m bnnr train` with built-in datasets does not construct multi-label loaders or `BCEWithLogitsLoss`; use the Python API or `examples/multilabel/` for end-to-end multi-label runs.

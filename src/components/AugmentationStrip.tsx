@@ -9,7 +9,7 @@ const augmentations = [
   { name: "TeaStains", description: "Dried liquid stain watermark overlays" },
   { name: "LuxferGlass", description: "Frosted glass refraction distortion" },
   { name: "Smugs", description: "Fingerprint smudges and grease streaks" },
-  { name: "Drust", description: "Rust and corrosion texture overlay" },
+  { name: "Drust", description: "Dust and debris particle overlay on the lens" },
   { name: "ICD", description: "Intelligent Coarse Dropout using XAI saliency maps" },
   { name: "AICD", description: "Anti-ICD: keeps salient regions, perturbs background" },
 ];

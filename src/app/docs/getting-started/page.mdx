@@ -1,7 +1,5 @@
 # Getting Started
 
-BNNR follows a closed-loop pipeline: **Train** your model, **Explain** what it focuses on with XAI, **Improve** its attention with ICD/AICD augmentations, and **Prove** the results with structured reports. This guide walks you through your first run.
-
 ## What you will find here
 A step-by-step path for first-time users:
 - installation,
@@ -21,30 +19,45 @@ Use this on a fresh machine or first setup.
 - `pip`
 - Optional GPU support depends on your local PyTorch/CUDA installation
 
-## 2) Install from PyPI
+## 2) Install BNNR
+
+If `python3 -m venv` fails with `ensurepip is not available`, install your OS venv package (for example `python3.12-venv` on Ubuntu) and retry.
+If you see `externally-managed-environment`, you're using system Python directly — activate the venv and run install commands inside it.
+
+### Option A — From PyPI (library + CLI)
 
 ```bash
 python3 -m venv /tmp/bnnr-venv
 source /tmp/bnnr-venv/bin/activate
 python -m pip install --upgrade pip
-pip install "bnnr[dashboard]"
+python -m pip install "bnnr[dashboard]"
 ```
 
-If `python3 -m venv` fails with `ensurepip is not available`, install your OS venv package (for example `python3.12-venv` on Ubuntu) and retry.
+Use this when you only need `import bnnr` and `python -m bnnr …`. Example scripts and notebooks under `examples/` are **not** inside the wheel; clone the [GitHub repository](https://github.com/bnnr-team/bnnr) if you want to run them (see [Examples Guide](/docs/examples/)).
 
-Optional extras:
+Optional extras from PyPI:
 
 ```bash
-pip install "bnnr[gpu]"             # GPU-accelerated augmentations (Kornia)
-pip install "bnnr[albumentations]"  # Albumentations integration
+python -m pip install "bnnr[gpu]"
+python -m pip install "bnnr[albumentations]"
 ```
 
-For development from source:
+### Option B — From a cloned repository (editable install)
 
 ```bash
 git clone https://github.com/bnnr-team/bnnr.git
 cd bnnr
-pip install -e ".[dev,dashboard]"
+python3 -m venv /tmp/bnnr-venv
+source /tmp/bnnr-venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e ".[dashboard]"
+```
+
+Optional extras (editable):
+
+```bash
+python -m pip install -e ".[gpu]"
+python -m pip install -e ".[albumentations]"
 ```
 
 ## 3) Sanity check CLI availability
@@ -73,6 +86,8 @@ candidate_pruning_enabled: false
 YAML
 ```
 
+**Multi-label classification:** `python -m bnnr train` with built-in datasets (`cifar10`, `mnist`, `imagefolder`, …) always uses single-label heads and `CrossEntropyLoss`. Putting `task: multilabel` in YAML **does not** switch the CLI to multi-label. Use the Python API (`task="multilabel"`, `SimpleTorchAdapter(multilabel=True)`, `BCEWithLogitsLoss`) or `examples/multilabel/multilabel_demo.py` — see [Configuration](/docs/configuration/), [Golden Path](/docs/golden-path/), [CLI Reference](/docs/cli/), and [Examples Guide](/docs/examples/).
+
 ## 5) First run in live dashboard mode (recommended)
 
 Run with dashboard enabled (`--with-dashboard` is default):
@@ -98,6 +113,15 @@ What you should see in terminal:
 - `Dashboard      : http://127.0.0.1:8080/`
 
 Important: in live dashboard mode, process stays alive after training to keep server running. Stop with `Ctrl+C` after your checks.
+
+When using the Python API (not CLI), call `start_dashboard()` **before** `trainer.run()` so the dashboard captures all events from the start:
+
+```python
+from bnnr import start_dashboard
+
+start_dashboard(config.report_dir)
+result = trainer.run()
+```
 
 ## 6) Open dashboard on desktop and mobile
 
@@ -182,13 +206,30 @@ python -m bnnr train \
 
 `--without-dashboard` disables only live server. Event logging remains enabled by CLI for post-run replay/export.
 
-## 12) Next pages
+## 12) Loading trained model for inference
 
-- [Dashboard Guide](/docs/dashboard/) — live mode, replay mode, mobile access
-- [Examples Guide](/docs/examples/) — classification and multi-label scripts
-- [Notebooks Guide](/docs/notebooks/) — Colab-ready notebooks
-- [Configuration](/docs/configuration/) — all BNNRConfig fields
-- [CLI Reference](/docs/cli/) — command-line interface
-- [Augmentations](/docs/augmentations/) — presets, ICD/AICD, custom augmentations
-- [API Reference](/docs/api-reference/) — Python API docs
-- [Troubleshooting](/docs/troubleshooting/) — common issues and fixes
+After training, load the best checkpoint for inference:
+
+```python
+import torch
+
+ckpt = torch.load(
+    "checkpoints/iter_1_augname.pt",
+    map_location="cpu",
+    weights_only=False,
+)
+model.load_state_dict(ckpt["model_state"])
+model.eval()
+```
+
+See [Troubleshooting](/docs/troubleshooting/) section 13 for details on checkpoint keys and PyTorch version notes.
+
+## 13) Next pages
+
+- [Dashboard Guide](/docs/dashboard/)
+- [Examples Guide](/docs/examples/)
+- [Notebooks Guide](/docs/notebooks/)
+- [Configuration](/docs/configuration/)
+- [CLI Reference](/docs/cli/)
+- [API Reference](/docs/api-reference/)
+- [Troubleshooting](/docs/troubleshooting/)

@@ -34,6 +34,20 @@ export default function PlaygroundPage() {
       <section id="code-playground">
         <CodePlayground />
       </section>
+
+      <p className="text-center text-xs max-w-2xl mx-auto pb-8" style={{ color: "var(--muted)" }}>
+        Sample photos and generated previews: licensing notes and saliency model credits are summarized in{" "}
+        <a
+          href="https://github.com/bnnr-team/bnnr-website/blob/main/public/playground/ATTRIBUTION.md"
+          className="underline hover:opacity-80"
+          style={{ color: "var(--accent)" }}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          playground/ATTRIBUTION.md
+        </a>
+        .
+      </p>
     </div>
   );
 }

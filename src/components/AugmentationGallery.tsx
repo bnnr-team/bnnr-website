@@ -44,7 +44,7 @@ const allAugmentations: AugmentationType[] = [
     description:
       "Partitions the image into regions using random lines, then applies a different noise profile (white, Gaussian, or pink) per region with configurable strength. Intensity blending controls how much of the augmented image replaces the original. All previews on this page were generated with bnnr.augmentations.ChurchNoise (probability=1.0, intensity=0.5, num_lines=3).",
     benefit:
-      "Trains the model to handle noise that varies spatially across the frame — the kind produced by cheap cameras, low-light conditions, or mixed sensor readouts. Benchmark-proven to improve accuracy on SVHN (+4.6pp).",
+      "Helps models tolerate noise that varies spatially across the frame — typical of cheap cameras, low-light capture, or mixed sensor readouts — without assuming a single global noise profile.",
   },
   {
     id: "procam",
@@ -55,7 +55,7 @@ const allAugmentations: AugmentationType[] = [
     description:
       "Simulates different camera hardware profiles by applying white balance shifts and gamma correction. Built-in profiles: cheap, smartphone, pro, webcam, darkroom. Runs on CUDA tensors for maximum throughput. Previews generated with bnnr.augmentations.ProCAM (probability=1.0).",
     benefit:
-      "Bridges the domain gap between training data captured on one camera and deployment across many devices. Benchmark-proven positive across all tested datasets (+1.4pp mean).",
+      "Useful when training data comes from one camera family but deployment spans different white balance, gamma, and color response — it encourages invariance to those shifts.",
   },
   {
     id: "drust",
@@ -77,7 +77,7 @@ const allAugmentations: AugmentationType[] = [
     description:
       "Creates elongated, streak-based HSV modifications that mimic fingerprint smudges and grease marks on a lens. The streaks follow natural finger motion patterns with directional color shifts. Previews generated with bnnr.augmentations.Smugs (probability=1.0, intensity=2.0, num_streaks=8).",
     benefit:
-      "Prevents accuracy drops when lenses are touched or improperly cleaned. Ranked #1 in the BNNR benchmark across all 25 tested augmentations (+2.0pp mean accuracy).",
+      "Reduces sensitivity to fingerprints, grease, and streaks on the lens — common in handheld devices, kiosks, and field-deployed cameras.",
   },
   {
     id: "tea_stains",
@@ -88,7 +88,7 @@ const allAugmentations: AugmentationType[] = [
     description:
       "Applies palette-based stain overlays with organic texture masks, simulating dried liquid marks, watermarks, or natural blemishes. Each stain has a unique shape derived from image palette colors. Previews generated with bnnr.augmentations.TeaStains (probability=1.0, intensity=0.5).",
     benefit:
-      "Ideal for document scanning, medical slide imaging, or any domain with surface artifacts. Consistent positive improvement across all benchmark datasets (+1.2pp mean).",
+      "Adds controlled stain-like overlays that mimic smudges, dried liquid marks, or uneven surface texture — relevant for documents, microscopy-style imagery, and worn surfaces.",
   },
   {
     id: "luxfer_glass",
@@ -110,7 +110,7 @@ const allAugmentations: AugmentationType[] = [
     description:
       "Randomly places circular regions on the image and applies color temperature shifts inside them — warm, cold, vivid, faded, sharpened, or blurred. Runs natively on CUDA tensors. Previews generated with bnnr.augmentations.DifPresets (probability=1.0, intensity=0.7).",
     benefit:
-      "Handles mixed-lighting deployment: warm indoor, cold outdoor, fluorescent, or LED. Prevents color bias from uniform training illumination. Positive on SVHN (+3.1pp).",
+      "Supports mixed-lighting deployment: warm indoor, cold outdoor, fluorescent, or LED — local color temperature pockets without relighting the whole scene.",
   },
   {
     id: "basic_augmentation",

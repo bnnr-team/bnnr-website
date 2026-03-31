@@ -52,14 +52,13 @@ Vercel automatically provisions SSL certificates.
 ```
 ├── public/
 │   ├── logos/               # BNNR logos (dark/light variants)
-│   ├── playground/          # Augmentation preview images (generated with BNNR)
+│   ├── playground/          # Augmentation preview images (generated with BNNR); see ATTRIBUTION.md
 │   └── team/                # Team profile photos
 ├── src/
 │   ├── app/                 # Next.js App Router pages
 │   │   ├── page.tsx         # Home page
 │   │   ├── layout.tsx       # Root layout (metadata, navbar, footer)
 │   │   ├── docs/            # Documentation (MDX pages)
-│   │   ├── benchmark/       # Benchmark results (coming soon)
 │   │   ├── playground/      # Interactive augmentation gallery
 │   │   ├── community/       # Community & contributing
 │   │   └── team/            # Team page

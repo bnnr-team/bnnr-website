@@ -8,7 +8,6 @@ import { Sun, Moon, Menu, X, Github } from "lucide-react";
 
 const NAV_LINKS = [
   { href: "/docs/getting-started/", label: "Docs" },
-  { href: "/benchmark/", label: "Benchmark" },
   { href: "/playground/", label: "Playground" },
   { href: "/community/", label: "Community" },
   { href: "/team/", label: "Team" },

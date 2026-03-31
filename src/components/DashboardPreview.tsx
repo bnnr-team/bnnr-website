@@ -63,9 +63,9 @@ export function DashboardPreview() {
           <div className="p-6 md:p-8">
             <div className="grid md:grid-cols-3 gap-4 mb-6">
               {[
-                { label: "Best Accuracy", value: "84.7%", highlight: true },
-                { label: "Baseline", value: "72.4%" },
-                { label: "BNNR Gain", value: "+12.3pp", highlight: true },
+                { label: "Selection metric", value: "—", highlight: true },
+                { label: "Baseline", value: "—" },
+                { label: "Δ vs baseline", value: "—", highlight: true },
               ].map((kpi) => (
                 <div
                   key={kpi.label}
