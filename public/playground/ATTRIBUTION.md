@@ -30,7 +30,7 @@ You must retain attribution when reusing the **original photograph**; the BNNR-g
 
 ## Augmented previews
 
-All `vehicle_*.png` and `fish_*.png` files except the two originals above are **outputs of BNNR** augmentations, using the same parameter choices described on the Playground page (e.g. ChurchNoise `intensity=0.5`, `num_lines=3`; ICD / AICD with the stated tile sizes and percentiles).
+All `vehicle_*.png` and `fish_*.png` files except the two originals above are **outputs of BNNR** augmentations. Noise, texture, and distortion previews use **stronger “gallery” parameters** than typical training defaults (see `scripts/generate_playground_assets.py` and the Playground copy). ICD / AICD use the tile sizes and percentiles stated on the Playground page.
 
 ## Saliency and ICD / AICD
 

@@ -42,7 +42,7 @@ const allAugmentations: AugmentationType[] = [
     runtime: "GPU",
     tagline: "Spatially-varying sensor noise",
     description:
-      "Partitions the image into regions using random lines, then applies a different noise profile (white, Gaussian, or pink) per region with configurable strength. Intensity blending controls how much of the augmented image replaces the original. All previews on this page were generated with bnnr.augmentations.ChurchNoise (probability=1.0, intensity=0.5, num_lines=3).",
+      "Partitions the image into regions using random lines, then applies a different noise profile (white, Gaussian, or pink) per region with configurable strength. Intensity blending controls how much of the augmented image replaces the original. Previews on this page use a stronger marketing preset: bnnr.augmentations.ChurchNoise (probability=1.0, intensity=1.0, num_lines=5, noise_strength_range=(12, 32)).",
     benefit:
       "Helps models tolerate noise that varies spatially across the frame — typical of cheap cameras, low-light capture, or mixed sensor readouts — without assuming a single global noise profile.",
   },
@@ -53,7 +53,7 @@ const allAugmentations: AugmentationType[] = [
     runtime: "GPU",
     tagline: "Camera hardware simulation",
     description:
-      "Simulates different camera hardware profiles by applying white balance shifts and gamma correction. Built-in profiles: cheap, smartphone, pro, webcam, darkroom. Runs on CUDA tensors for maximum throughput. Previews generated with bnnr.augmentations.ProCAM (probability=1.0).",
+      "Simulates different camera hardware profiles by applying white balance shifts and gamma correction. Built-in profiles: cheap, smartphone, pro, webcam, darkroom. Runs on CUDA tensors for maximum throughput. Previews use bnnr.augmentations.ProCAM (probability=1.0, intensity=1.85) so the color shift reads clearly in the gallery.",
     benefit:
       "Useful when training data comes from one camera family but deployment spans different white balance, gamma, and color response — it encourages invariance to those shifts.",
   },
@@ -64,7 +64,7 @@ const allAugmentations: AugmentationType[] = [
     runtime: "CPU",
     tagline: "Dust and debris on lens",
     description:
-      "Generates multi-layer particle overlays with per-particle Gaussian blur, simulating dust, dirt, and debris on a lens. Each particle has randomized size, opacity, position, and blur radius. Previews generated with bnnr.augmentations.Drust (probability=1.0, intensity=2.0, layers=4, base_particles=2000).",
+      "Generates multi-layer particle overlays with per-particle Gaussian blur, simulating dust, dirt, and debris on a lens. Each particle has randomized size, opacity, position, and blur radius. Previews use a denser preset: bnnr.augmentations.Drust (probability=1.0, intensity=2.0, layers=6, base_particles=6500).",
     benefit:
       "Makes models robust to dirty lenses in outdoor and industrial environments — surveillance cameras, factory inspection, agriculture drones, autonomous vehicles.",
   },
@@ -75,7 +75,7 @@ const allAugmentations: AugmentationType[] = [
     runtime: "CPU",
     tagline: "Fingerprint smudges and grease",
     description:
-      "Creates elongated, streak-based HSV modifications that mimic fingerprint smudges and grease marks on a lens. The streaks follow natural finger motion patterns with directional color shifts. Previews generated with bnnr.augmentations.Smugs (probability=1.0, intensity=2.0, num_streaks=8).",
+      "Creates elongated, streak-based HSV modifications that mimic fingerprint smudges and grease marks on a lens. The streaks follow natural finger motion patterns with directional color shifts. Previews use bnnr.augmentations.Smugs (probability=1.0, intensity=2.0, num_streaks=14).",
     benefit:
       "Reduces sensitivity to fingerprints, grease, and streaks on the lens — common in handheld devices, kiosks, and field-deployed cameras.",
   },
@@ -86,7 +86,7 @@ const allAugmentations: AugmentationType[] = [
     runtime: "CPU",
     tagline: "Stain and watermark overlays",
     description:
-      "Applies palette-based stain overlays with organic texture masks, simulating dried liquid marks, watermarks, or natural blemishes. Each stain has a unique shape derived from image palette colors. Previews generated with bnnr.augmentations.TeaStains (probability=1.0, intensity=0.5).",
+      "Applies palette-based stain overlays with organic texture masks, simulating dried liquid marks, watermarks, or natural blemishes. Each stain has a unique shape derived from image palette colors. Previews use bnnr.augmentations.TeaStains (probability=1.0, intensity=1.35).",
     benefit:
       "Adds controlled stain-like overlays that mimic smudges, dried liquid marks, or uneven surface texture — relevant for documents, microscopy-style imagery, and worn surfaces.",
   },
@@ -97,7 +97,7 @@ const allAugmentations: AugmentationType[] = [
     runtime: "CPU",
     tagline: "Frosted glass refraction",
     description:
-      "Divides the image into a configurable grid and applies localized refraction-like displacement with wave effects. Simulates viewing through textured or frosted glass — preserves overall structure while distorting fine details. Previews generated with bnnr.augmentations.LuxferGlass (probability=1.0, intensity=0.5).",
+      "Divides the image into a configurable grid and applies localized refraction-like displacement with wave effects. Simulates viewing through textured or frosted glass — preserves overall structure while distorting fine details. Previews use a stronger grid/wave preset: bnnr.augmentations.LuxferGlass (probability=1.0, intensity=1.0, grid_range=(48, 96), glass_thickness=(0.07, 0.16), wave_strength=(0.55, 1.15), blur_kernel=(3, 9)).",
     benefit:
       "Simulates imaging through protective covers, plastic housings, or underwater enclosures — common in industrial inspection, underwater robotics, and security cameras.",
   },
@@ -108,7 +108,7 @@ const allAugmentations: AugmentationType[] = [
     runtime: "GPU",
     tagline: "Color temperature circles",
     description:
-      "Randomly places circular regions on the image and applies color temperature shifts inside them — warm, cold, vivid, faded, sharpened, or blurred. Runs natively on CUDA tensors. Previews generated with bnnr.augmentations.DifPresets (probability=1.0, intensity=0.7).",
+      "Randomly places circular regions on the image and applies color temperature shifts inside them — warm, cold, vivid, faded, sharpened, or blurred. Runs natively on CUDA tensors. Previews use more/larger circles: bnnr.augmentations.DifPresets (probability=1.0, intensity=1.5, num_circles_range=(6, 11), radius_range=(28, 100), feather=26).",
     benefit:
       "Supports mixed-lighting deployment: warm indoor, cold outdoor, fluorescent, or LED — local color temperature pockets without relighting the whole scene.",
   },
@@ -119,7 +119,7 @@ const allAugmentations: AugmentationType[] = [
     runtime: "CPU",
     tagline: "General-purpose regional transforms",
     description:
-      "Applies chromatic aberration or HSV adjustments to random rectangular regions, with an optional global Gaussian blur. A mild, versatile transform for general use. Previews generated with bnnr.augmentations.BasicAugmentation (probability=1.0, intensity=0.5).",
+      "Applies chromatic aberration or HSV adjustments to random rectangular regions, with an optional global Gaussian blur. A mild, versatile transform for general use. Previews use a stronger gallery preset: bnnr.augmentations.BasicAugmentation (probability=1.0, intensity=1.2, global_blur_sigma=0.65).",
     benefit:
       "A safe baseline augmentation that adds diversity without strong domain assumptions. Good starting point when you're unsure which degradation matters most for your use case.",
   },

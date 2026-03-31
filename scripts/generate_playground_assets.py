@@ -155,40 +155,61 @@ def main() -> None:
 
         base_seed = 910_000 + d_idx * 10_000
 
+        # Stronger noise / texture / distortion than default training presets so
+        # marketing previews read clearly on the Playground (still valid BNNR APIs).
         augs: dict[str, Callable[[], object]] = {
             "church_noise": lambda s=base_seed + 1: ChurchNoise(
                 probability=1.0,
-                intensity=0.5,
-                num_lines=3,
+                intensity=1.0,
+                num_lines=5,
+                noise_strength_range=(12.0, 32.0),
                 random_state=s,
             ),
             "procam": lambda s=base_seed + 2: ProCAM(
-                probability=1.0, random_state=s
+                probability=1.0,
+                intensity=1.85,
+                random_state=s,
             ),
             "drust": lambda s=base_seed + 3: Drust(
                 probability=1.0,
                 intensity=2.0,
-                layers=4,
-                base_particles=2000,
+                layers=6,
+                base_particles=6500,
                 random_state=s,
             ),
             "smugs": lambda s=base_seed + 4: Smugs(
                 probability=1.0,
                 intensity=2.0,
-                num_streaks=8,
+                num_streaks=14,
                 random_state=s,
             ),
             "tea_stains": lambda s=base_seed + 5: TeaStains(
-                probability=1.0, intensity=0.5, random_state=s
+                probability=1.0,
+                intensity=1.35,
+                random_state=s,
             ),
             "luxfer_glass": lambda s=base_seed + 6: LuxferGlass(
-                probability=1.0, intensity=0.5, random_state=s
+                probability=1.0,
+                intensity=1.0,
+                grid_range=(48, 96),
+                glass_thickness=(0.07, 0.16),
+                wave_strength=(0.55, 1.15),
+                blur_kernel=(3, 9),
+                random_state=s,
             ),
             "dif_presets": lambda s=base_seed + 7: DifPresets(
-                probability=1.0, intensity=0.7, random_state=s
+                probability=1.0,
+                intensity=1.5,
+                num_circles_range=(6, 11),
+                radius_range=(28, 100),
+                feather=26,
+                random_state=s,
             ),
             "basic_augmentation": lambda s=base_seed + 8: BasicAugmentation(
-                probability=1.0, intensity=0.5, random_state=s
+                probability=1.0,
+                intensity=1.2,
+                global_blur_sigma=0.65,
+                random_state=s,
             ),
         }
 
