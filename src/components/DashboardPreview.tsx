@@ -20,6 +20,11 @@ const notebooks = [
     description: "Bring your own images with ImageFolder-style layouts",
     link: "https://colab.research.google.com/github/bnnr-team/bnnr/blob/main/examples/bnnr_custom_data.ipynb",
   },
+  {
+    title: "Detection Demo",
+    description: "Object detection on VOC 2007 with bbox augmentations and mAP",
+    link: "https://colab.research.google.com/github/bnnr-team/bnnr/blob/main/examples/detection/bnnr_detection_demo.ipynb",
+  },
 ];
 
 export function DashboardPreview() {
@@ -203,7 +208,7 @@ export function DashboardPreview() {
         <h3 className="text-xl font-semibold text-center mb-6" style={{ color: "var(--fg)" }}>
           Try it in Google Colab
         </h3>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {notebooks.map((nb, i) => (
             <motion.a
               key={nb.title}

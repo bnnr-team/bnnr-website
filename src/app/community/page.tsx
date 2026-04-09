@@ -29,6 +29,11 @@ const notebooks = [
     description: "Bring your own images using an ImageFolder-style layout.",
     link: "https://colab.research.google.com/github/bnnr-team/bnnr/blob/main/examples/bnnr_custom_data.ipynb",
   },
+  {
+    title: "Detection Demo",
+    description: "Object detection on VOC 2007 with bbox augmentations and mAP metrics.",
+    link: "https://colab.research.google.com/github/bnnr-team/bnnr/blob/main/examples/detection/bnnr_detection_demo.ipynb",
+  },
 ];
 
 const links = [
