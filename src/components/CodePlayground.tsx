@@ -55,6 +55,49 @@ result = quick_run(
 print(f"Best accuracy: {result.best_metrics}")
 print(f"Aug path:      {result.best_path}")`,
   },
+  detection: {
+    title: "Object Detection",
+    description:
+      "Detection pipeline with torchvision RetinaNet. Supports any torchvision or Ultralytics YOLO model via DetectionAdapter.",
+    code: `# pip install "bnnr[dashboard]"
+from bnnr import (
+    BNNRConfig, BNNRTrainer, DetectionAdapter,
+    DetectionHorizontalFlip, DetectionRandomScale,
+    DetectionICD, detection_collate_fn_with_index,
+)
+
+import torch
+from torch.utils.data import DataLoader
+from torchvision.models.detection import retinanet_resnet50_fpn
+
+model = retinanet_resnet50_fpn(weights="DEFAULT")
+
+adapter = DetectionAdapter(
+    model=model,
+    optimizer=torch.optim.AdamW(model.parameters(), lr=1e-4),
+    device="auto",
+)
+
+augmentations = [
+    DetectionHorizontalFlip(probability=0.5),
+    DetectionRandomScale(probability=0.5, scale_range=(0.8, 1.2)),
+    DetectionICD(probability=0.3),
+]
+
+config = BNNRConfig(
+    task="detection",
+    m_epochs=5,
+    max_iterations=3,
+    metrics=["map_50", "map_50_95", "loss"],
+)
+
+trainer = BNNRTrainer(
+    adapter, train_loader, val_loader,
+    augmentations, config,
+)
+result = trainer.run()
+print(f"Best mAP@50: {result.best_metrics}")`,
+  },
   icd_aicd: {
     title: "ICD / AICD",
     description:

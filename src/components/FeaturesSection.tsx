@@ -9,6 +9,7 @@ import {
   Zap,
   Shield,
   Scan,
+  Box,
 } from "lucide-react";
 import { FeatureCard } from "./FeatureCard";
 
@@ -22,9 +23,16 @@ const features = [
   },
   {
     icon: <Crosshair size={24} />,
-    title: "Image classification",
+    title: "Image Classification",
     description:
       "End-to-end workflow from baseline training to stakeholder-ready reports, metrics, and dashboard views.",
+    phase: "Train",
+  },
+  {
+    icon: <Box size={24} />,
+    title: "Object Detection",
+    description:
+      "Full detection pipeline with YOLO and torchvision models (Faster R-CNN, RetinaNet, SSD). Bbox-aware augmentations, detection ICD/AICD, mAP metrics, and XAI saliency.",
     phase: "Train",
   },
   {

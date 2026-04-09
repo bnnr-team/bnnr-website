@@ -28,7 +28,7 @@ const teamMembers = [
   {
     name: "Diana Morzhak",
     role: "Software Developer & QA Engineer",
-    bio: "Responsible for feature development, quality assurance, and end-to-end testing — ensuring reliability across classification workflows.",
+    bio: "Responsible for feature development, quality assurance, and end-to-end testing — ensuring reliability across classification and detection workflows.",
     avatar: "/team/diana.jpg",
     links: {},
   },
@@ -97,7 +97,8 @@ export default function TeamPage() {
             </p>
             <p>
               BNNR supports <strong style={{ color: "var(--fg)" }}>single-label</strong> and{" "}
-              <strong style={{ color: "var(--fg)" }}>multi-label classification</strong>, with
+              <strong style={{ color: "var(--fg)" }}>multi-label classification</strong>, as well as{" "}
+              <strong style={{ color: "var(--fg)" }}>object detection</strong> (YOLO, Faster R-CNN, RetinaNet, SSD), with
               task-appropriate metrics and the same train–explain–improve loop.
             </p>
           </div>

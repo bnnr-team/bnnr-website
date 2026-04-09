@@ -88,13 +88,13 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-4">
             <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs font-mono" style={{ background: "var(--code-bg)", color: "var(--muted)", border: "1px solid var(--code-border)" }}>
-              Python 3.9+
+              Python 3.10+
             </span>
             <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs font-mono" style={{ background: "var(--code-bg)", color: "var(--muted)", border: "1px solid var(--code-border)" }}>
               PyTorch 2.0+
             </span>
             <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs font-mono" style={{ background: "var(--code-bg)", color: "var(--muted)", border: "1px solid var(--code-border)" }}>
-              v0.1.0
+              v0.2.1
             </span>
           </div>
         </div>

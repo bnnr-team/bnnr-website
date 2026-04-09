@@ -5,9 +5,9 @@ import { Shield, Code2, Cpu, FileCode } from "lucide-react";
 
 const stats = [
   { icon: <Shield size={20} />, label: "MIT License", value: "Open Source" },
-  { icon: <Code2 size={20} />, label: "Python", value: "3.9+" },
+  { icon: <Code2 size={20} />, label: "Python", value: "3.10+" },
   { icon: <Cpu size={20} />, label: "PyTorch", value: "2.0+" },
-  { icon: <FileCode size={20} />, label: "Version", value: "0.1.0" },
+  { icon: <FileCode size={20} />, label: "Version", value: "0.2.1" },
 ];
 
 export function StatsBar() {
