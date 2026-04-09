@@ -21,6 +21,7 @@ const navItems: NavItem[] = [
     title: "Augmentations",
     href: "/docs/augmentations/"
   },
+  { title: "Detection", href: "/docs/detection/" },
   { title: "Examples Guide", href: "/docs/examples/" },
   { title: "Notebooks Guide", href: "/docs/notebooks/" },
   { title: "Artifacts & Outputs", href: "/docs/artifacts/" },

@@ -150,3 +150,46 @@ result = quick_run(
 ```
 
 Useful arguments include `augmentations`, `config`/overrides, `criterion`, `optimizer`, `target_layers`, and `eval_metrics`.
+
+## Detection
+
+### Model Adapters
+
+- `DetectionAdapter(model, optimizer, target_layers=None, device="cuda", scheduler=None, use_amp=False, score_threshold=0.05)` — wraps torchvision-style detectors (Faster R-CNN, RetinaNet, SSD, FCOS). In train mode calls `model(images, targets)` for losses; in eval mode calls `model(images)` for prediction dicts.
+- `UltralyticsDetectionAdapter(model_name="yolov8n.pt", device="cuda", score_threshold=0.05, num_classes=None, lr=1e-3, optimizer=None, use_amp=False)` — wraps Ultralytics YOLO. Exposes `predict_detection_dicts(batch_bchw)` for XAI and probe snapshots.
+
+Both adapters implement `train_step`, `eval_step`, `epoch_end_eval`, `epoch_end`, `state_dict`, `load_state_dict`, `get_target_layers`, and `get_model`.
+
+### Collate Functions
+
+- `detection_collate_fn(batch)` → `(Tensor[B,C,H,W], list[dict])`
+- `detection_collate_fn_with_index(batch)` → `(Tensor[B,C,H,W], list[dict], Tensor[B])`
+
+### Detection Augmentations
+
+Bbox-aware transforms (subclass `BboxAwareAugmentation`):
+
+- `DetectionHorizontalFlip`, `DetectionVerticalFlip`, `DetectionRandomRotate90`
+- `DetectionRandomScale(scale_range=(0.8, 1.2))`
+- `MosaicAugmentation(output_size=(640, 640))`, `DetectionMixUp(alpha_range=(0.3, 0.7))`
+- `AlbumentationsBboxAugmentation(transform)`
+
+XAI-driven: `DetectionICD`, `DetectionAICD` — saliency-based tile masking for detection.
+
+Presets: `get_detection_preset(name)` with `name` ∈ `{"light", "standard", "aggressive"}`.
+
+### Detection Metrics
+
+- `calculate_detection_metrics(predictions, targets, iou_thresholds=None, score_threshold=0.0)` → `{"map_50", "map_50_95"}`
+- `calculate_per_class_ap(predictions, targets, iou_threshold=0.5, class_names=None)` → per-class AP dict
+- `calculate_detection_confusion_matrix(predictions, targets, num_classes=None, iou_threshold=0.5)` → `{"labels", "matrix"}`
+
+### Detection XAI
+
+- `generate_detection_saliency(...)` — backbone activation–based class-agnostic saliency
+- `compute_detection_box_saliency_occlusion(...)` — per-box occlusion grid saliency
+- `draw_boxes_on_image(...)` — draw xyxy boxes with labels and scores
+- `overlay_saliency_heatmap(...)` — blend saliency with colormap
+- `save_detection_xai_panels(...)` — writes ground-truth, saliency, and prediction triptych
+
+See [Detection](/docs/detection/) for the full guide with examples.
