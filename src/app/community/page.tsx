@@ -235,23 +235,22 @@ mypy src/bnnr/`}</code>
       <section>
         <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--fg)" }}>
           Colab Notebooks
-          <span className="ml-3 text-xs font-normal px-2 py-1 rounded-full"
-            style={{ background: "rgba(240,160,105,0.1)", color: "var(--accent)", verticalAlign: "middle" }}>
-            Coming Soon
-          </span>
         </h2>
         <p className="text-sm mb-4" style={{ color: "var(--muted)" }}>
-          Interactive notebooks are being prepared. Once published, they will be directly runnable on Google Colab.
+          Run BNNR directly in Google Colab — no local setup required.
         </p>
         <div className="grid sm:grid-cols-2 gap-4">
           {notebooks.map((nb, i) => (
-            <motion.div
+            <motion.a
               key={nb.title}
+              href={nb.link}
+              target="_blank"
+              rel="noopener noreferrer"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.1 }}
-              className="card opacity-75"
+              className="card group cursor-pointer hover:border-[var(--accent)] transition-all"
             >
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2">
@@ -260,15 +259,13 @@ mypy src/bnnr/`}</code>
                     {nb.title}
                   </h3>
                 </div>
-                <span className="text-xs px-2 py-0.5 rounded-full shrink-0"
-                  style={{ background: "rgba(240,160,105,0.1)", color: "var(--accent)" }}>
-                  Soon
-                </span>
+                <ExternalLink size={14} style={{ color: "var(--muted)" }}
+                  className="group-hover:text-[var(--accent)] transition-colors shrink-0 mt-0.5" />
               </div>
               <p className="text-xs" style={{ color: "var(--muted)" }}>
                 {nb.description}
               </p>
-            </motion.div>
+            </motion.a>
           ))}
         </div>
       </section>
