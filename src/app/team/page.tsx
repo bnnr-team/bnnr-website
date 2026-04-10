@@ -37,6 +37,7 @@ const teamMembers = [
     role: "Marketing & Communications Specialist",
     bio: "Drives community outreach, content strategy, and brand presence for BNNR across social channels and developer communities.",
     avatar: "/team/dominika.png",
+    avatarImageClass: "object-[center_26%] scale-[0.91] origin-center",
     links: {},
   },
   {
@@ -124,6 +125,7 @@ export default function TeamPage() {
                 className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden"
                 style={{
                   border: "2px solid rgba(240,160,105,0.3)",
+                  background: "var(--card-bg)",
                 }}
               >
                 <Image
@@ -131,7 +133,12 @@ export default function TeamPage() {
                   alt={member.name}
                   width={96}
                   height={96}
-                  className="w-full h-full object-cover"
+                  className={
+                    "w-full h-full object-cover " +
+                    ("avatarImageClass" in member && member.avatarImageClass
+                      ? member.avatarImageClass
+                      : "")
+                  }
                 />
               </div>
 
