@@ -22,7 +22,8 @@ const notebooks = [
   },
   {
     title: "Detection Demo",
-    description: "Object detection on VOC 2007 with bbox augmentations and mAP",
+    description:
+      "YOLOv8 on COCO128: bbox-aware augmentations, mAP, and three-panel detection XAI (install bnnr ≥ 0.2.6 on Colab)",
     link: "https://colab.research.google.com/github/bnnr-team/bnnr/blob/main/examples/detection/bnnr_detection_demo.ipynb",
   },
 ];
