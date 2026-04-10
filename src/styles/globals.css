@@ -171,11 +171,13 @@
   color: var(--fg);
   border-bottom: 1px solid var(--border-color);
   padding-bottom: 0.5rem;
+  scroll-margin-top: 5.5rem;
 }
 
 .prose h3 {
   @apply text-xl font-semibold mt-8 mb-3;
   color: var(--fg);
+  scroll-margin-top: 5.5rem;
 }
 
 .prose h4 {
