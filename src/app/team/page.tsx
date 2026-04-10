@@ -36,7 +36,7 @@ const teamMembers = [
     name: "Dominika Zydorczyk",
     role: "Marketing & Communications Specialist",
     bio: "Drives community outreach, content strategy, and brand presence for BNNR across social channels and developer communities.",
-    avatar: "/team/dominika.webp",
+    avatar: "/team/dominika.png",
     links: {},
   },
   {
