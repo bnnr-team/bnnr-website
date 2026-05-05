@@ -32,7 +32,7 @@ const notebooks = [
   {
     title: "Detection Demo",
     description:
-      "YOLOv8 on COCO128 with bbox-aware augmentations, mAP metrics, and detection XAI (use bnnr ≥ 0.2.6 from PyPI).",
+      "YOLOv8 on COCO128 with bbox-aware augmentations, mAP metrics, and detection XAI (use bnnr ≥ 0.2.9 from PyPI).",
     link: "https://colab.research.google.com/github/bnnr-team/bnnr/blob/main/examples/detection/bnnr_detection_demo.ipynb",
   },
 ];
