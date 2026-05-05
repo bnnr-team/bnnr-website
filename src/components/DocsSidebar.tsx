@@ -24,6 +24,7 @@ const navItems: NavItem[] = [
   { title: "Detection", href: "/docs/detection/" },
   { title: "Examples Guide", href: "/docs/examples/" },
   { title: "Notebooks Guide", href: "/docs/notebooks/" },
+  { title: "Cookings (Round 1)", href: "/cookings/cooking-1/" },
   { title: "Artifacts & Outputs", href: "/docs/artifacts/" },
   { title: "Troubleshooting", href: "/docs/troubleshooting/" },
 ];
