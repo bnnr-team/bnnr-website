@@ -1,0 +1,289 @@
+# Model Analysis
+
+Run **zero-friction diagnostics** on a trained model without running full BNNR training. `bnnr analyze` produces metrics, XAI insights, data quality checks, failure patterns, and actionable recommendations — all in a single command.
+
+**New in v0.3.0.** Supports `classification` and `multilabel` tasks.
+
+---
+
+## Quick Start
+
+```bash
+# 1. Train a model (or use an existing checkpoint)
+python3 -m bnnr train --dataset cifar10 -o out_cifar -e 3
+
+# 2. Run analysis
+python3 -m bnnr analyze \
+  --model out_cifar/checkpoints/best.pt \
+  --data cifar10 \
+  --output out_analyze
+
+# 3. Open the HTML report
+xdg-open out_analyze/report.html
+```
+
+The report includes: accuracy/F1, per-class diagnostics, confusion matrix, XAI quality score, failure patterns, and actionable recommendations.
+
+---
+
+## How It Works
+
+`bnnr analyze` runs a 6-step pipeline on your trained model:
+
+1. **Evaluation** — forward pass on the validation set to compute metrics (accuracy, F1, precision, recall, Cohen's kappa), per-class accuracy, and confusion matrix.
+2. **XAI** (optional) — saliency maps and rich analysis (focus ratio, edge ratio, quality score, class diagnoses) on a configurable probe set.
+3. **Data quality** (optional) — duplicate detection and image quality checks on the validation data.
+4. **Failure analysis** — per-sample predictions ranked by loss/confidence; top-N worst predictions with optional XAI overlays.
+5. **Failure patterns** — automated detection of confused class pairs, classes with low XAI quality, zero/near-zero recall, class collapse, dominant bias, and calibration issues.
+6. **Recommendations** — prioritized, literature-backed improvement hints linked to detected findings (e.g. "add data for class X", "consider ICD", "review data labeling").
+
+---
+
+## CLI Reference
+
+```bash
+python3 -m bnnr analyze --model PATH --data PATH_OR_DATASET --output DIR [OPTIONS]
+```
+
+### Required Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `--model`, `-m` | Path to a saved model checkpoint (`.pt`). Supports BNNR checkpoints (with `model_state` or `model` key) or raw `state_dict`. |
+| `--data`, `-d` | Either a directory path (ImageFolder-style: `class1/`, `class2/`, …) or a built-in dataset name: `mnist`, `fashion_mnist`, `cifar10`, `stl10`. |
+| `--output`, `-o` | Directory where `analysis_report.json` and `report.html` are written. |
+
+### Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `--task`, `-t` | `classification` | Task type: `classification` or `multilabel`. Detection is not supported by analyze. |
+| `--config`, `-c` | None | Optional BNNR config YAML (for device, metrics, num_classes, etc.). |
+| `--max-worst` | 20 | Number of worst predictions to include in the report. |
+| `--no-xai` | false | Disable XAI analysis (faster run). |
+| `--no-data-quality` | false | Disable data quality checks. |
+| `--device` | auto | Device: `cuda`, `cpu`, or `auto`. |
+| `--batch-size` | 64 | Batch size for evaluation. |
+| `--cv-folds` | 0 | Number of folds for lightweight cross-validation on cached predictions (0 = disabled). |
+| `--xai-samples` | 500 | Number of samples for XAI probe set. More = more accurate, slower. |
+| `--summary/--no-summary` | enabled | Print executive summary, key findings, and top actions to stdout. |
+
+### Behavior Notes
+
+- The CLI builds a pipeline (dataset + adapter) from `--data` and loads the checkpoint into the adapter.
+- For ImageFolder, use `--data /path/to/val_root`; the pipeline expects `--config` or compatible defaults.
+- XAI requires an adapter that implements `XAICapableModel` (e.g. `SimpleTorchAdapter` with `target_layers`).
+- `--cv-folds` is a lightweight estimate of metric variability: one inference pass, then k-fold metrics on cached predictions (no retraining).
+
+---
+
+## Python API
+
+### `analyze_model`
+
+```python
+from bnnr import analyze_model, SimpleTorchAdapter
+import torch
+
+# Build your adapter with target_layers for XAI
+adapter = SimpleTorchAdapter(
+    model=my_model,
+    criterion=torch.nn.CrossEntropyLoss(),
+    optimizer=torch.optim.Adam(my_model.parameters()),
+    target_layers=[my_model.features[-1]],
+    device="auto",
+)
+
+# Run analysis
+report = analyze_model(
+    adapter,
+    val_loader,
+    config=None,
+    task="classification",
+    output_dir="./analysis_out",
+    run_data_quality=True,
+    max_worst=20,
+    xai_enabled=True,
+    xai_method="opticam",
+    xai_samples=500,
+    cv_folds=3,
+    data_quality_max_samples=5000,
+)
+
+# Access results
+print(report.metrics)           # {"accuracy": 0.92, "f1_macro": 0.91, ...}
+print(report.executive_summary) # health score, key findings, top actions
+print(report.findings)          # structured root-cause findings
+print(report.recommendations)   # text recommendations
+
+# Save outputs
+report.save("./analysis_out")
+report.to_html("./analysis_out/report.html")
+```
+
+### `AnalysisReport` Attributes
+
+**Core fields:**
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `metrics` | `dict[str, float]` | Global metrics: accuracy, F1, precision, recall, loss, Cohen's kappa, ECE. |
+| `per_class_accuracy` | `dict[str, dict]` | Per-class accuracy and support. |
+| `confusion` | `dict` | Confusion matrix data. |
+| `xai_insights` | `dict` | XAI summary insights per class. |
+| `xai_diagnoses` | `dict` | Per-class XAI diagnostic details. |
+| `xai_quality_summary` | `dict` | Overall XAI quality (mean score, distribution). |
+| `data_quality_result` | `dict` | Data quality analysis results. |
+| `failure_patterns` | `list[dict]` | Detected failure patterns (confused pairs, low XAI, etc.). |
+| `recommendations` | `list[str]` | Text improvement recommendations. |
+
+**Extended fields (v0.2+):**
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `schema_version` | `str` | Report schema version (currently `"0.2.1"`). |
+| `executive_summary` | `dict` | Health badge/score, key findings, top actions, critical classes. |
+| `findings` | `list[dict]` | Structured findings with type, evidence, interpretation, severity. |
+| `recommendations_structured` | `list[dict]` | Prioritized recommendations linked to findings. |
+| `class_diagnostics` | `list[dict]` | Per-class precision/recall/F1/support/severity. |
+| `true_distribution` | `dict[str, int]` | Ground truth class distribution. |
+| `pred_distribution` | `dict[str, int]` | Predicted class distribution. |
+| `distribution_summary` | `dict` | Over/under-predicted classes, collapse hints. |
+| `failure_patterns_extended` | `list[dict]` | Enriched failure taxonomy with evidence. |
+| `cv_results` | `dict` | Cross-validation results (per-fold metrics, mean/std). |
+| `calibration_summary` | `dict` | ECE and calibration bin statistics. |
+| `confusion_pair_xai` | `list[dict]` | XAI analysis for top confused class pairs. |
+| `best_worst_examples` | `dict` | Best/worst examples per class with overlay paths. |
+
+**Methods:**
+
+- `save(output_dir)` — writes `analysis_report.json` and artifact directories.
+- `to_html(path)` — writes a self-contained HTML report with dark/light theme.
+- `failure_patterns_list()` — returns the list of detected failure patterns.
+
+---
+
+## Output Files
+
+After running `bnnr analyze --output ./out`:
+
+```
+out/
+├── analysis_report.json    # Full structured report (all fields above)
+├── report.html             # Self-contained HTML report (dark theme, interactive)
+└── artifacts/              # Optional (when XAI enabled)
+    ├── xai_examples/       # Per-class XAI overlay samples
+    ├── confusion_pairs/    # XAI overlays for confused class pairs
+    ├── class_examples/     # Best/worst examples per class
+    └── data_quality/       # Data quality thumbnails and diagnostics
+```
+
+---
+
+## Supported Datasets
+
+| Dataset | `--data` value | Resolution | Classes |
+|---------|---------------|------------|---------|
+| MNIST | `mnist` | 28×28 grayscale | 10 |
+| Fashion-MNIST | `fashion_mnist` | 28×28 grayscale | 10 |
+| CIFAR-10 | `cifar10` | 32×32 RGB | 10 |
+| STL-10 | `stl10` | 96×96 RGB | 10 |
+| Custom | `/path/to/dir` | Any (ImageFolder layout) | Auto-detected |
+
+For custom ImageFolder datasets, organize images as:
+```
+val_root/
+├── class_a/
+│   ├── img001.jpg
+│   └── ...
+├── class_b/
+│   └── ...
+└── ...
+```
+
+---
+
+## Examples
+
+### Analyze after BNNR training
+
+```bash
+python3 -m bnnr analyze \
+  --model reports/run_20260501_120000/checkpoints/best.pt \
+  --data mnist \
+  --output ./analysis_mnist
+```
+
+### Custom ImageFolder with config
+
+```bash
+python3 -m bnnr analyze \
+  --model ./my_model.pt \
+  --data /path/to/validation_images \
+  --output ./analysis_custom \
+  --config my_config.yaml
+```
+
+### Fast mode (no XAI, no data quality)
+
+```bash
+python3 -m bnnr analyze \
+  --model best.pt \
+  --data cifar10 \
+  --output ./out \
+  --no-xai \
+  --no-data-quality
+```
+
+### With cross-validation
+
+```bash
+python3 -m bnnr analyze \
+  --model best.pt \
+  --data stl10 \
+  --output ./out \
+  --cv-folds 5
+```
+
+### Multilabel task
+
+```bash
+python3 -m bnnr analyze \
+  --model multilabel_best.pt \
+  --data /path/to/multilabel_val \
+  --output ./out_ml \
+  --task multilabel
+```
+
+---
+
+## Metric Definitions
+
+| Metric | Description |
+|--------|-------------|
+| `accuracy` | Overall classification accuracy. |
+| `f1_macro` | Macro-averaged F1 score across all classes. |
+| `precision_macro` | Macro-averaged precision. |
+| `recall_macro` | Macro-averaged recall. |
+| `cohen_kappa` | Agreement beyond chance (chance-corrected), scalar in [-1, 1]. |
+| `ECE (top-1)` | Expected calibration error on top-1 confidence bins. |
+
+---
+
+## Limitations (v0.3.0)
+
+- **Detection**: Not supported by `bnnr analyze`. Use classification or multilabel only.
+- **Compare**: No built-in comparison of two models (e.g. pre vs post fine-tuning); planned for a later release.
+- **Events**: Analyze does not emit events to `events.jsonl`; it produces standalone artifacts only.
+- **ROC/PR curves**: Not rendered in `report.html` yet (point metrics and diagnostics only).
+- **Concept XAI**: Current analyze uses saliency/CAM-style methods; CRAFT/NMF concept-level methods are roadmap candidates.
+
+---
+
+## See Also
+
+- [CLI Reference](/docs/cli/) — full CLI command list
+- [API Reference](/docs/api-reference/) — public Python API
+- [Configuration](/docs/configuration/) — `BNNRConfig` fields
+- [Artifacts & Outputs](/docs/artifacts/) — output file layouts
+- [Golden Path](/docs/golden-path/) — integrating BNNR with your own model

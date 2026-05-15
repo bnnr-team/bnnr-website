@@ -10,6 +10,7 @@ const docsOrder = [
   { href: "/docs/cli/", title: "CLI Reference" },
   { href: "/docs/configuration/", title: "Configuration" },
   { href: "/docs/api-reference/", title: "API Reference" },
+  { href: "/docs/analyze/", title: "Model Analysis" },
   { href: "/docs/golden-path/", title: "Golden Path" },
   { href: "/docs/augmentations/", title: "Augmentations" },
   { href: "/docs/examples/", title: "Examples Guide" },

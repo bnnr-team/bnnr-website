@@ -16,6 +16,7 @@ const navItems: NavItem[] = [
   { title: "CLI Reference", href: "/docs/cli/" },
   { title: "Configuration", href: "/docs/configuration/" },
   { title: "API Reference", href: "/docs/api-reference/" },
+  { title: "Model Analysis", href: "/docs/analyze/" },
   { title: "Golden Path", href: "/docs/golden-path/" },
   {
     title: "Augmentations",

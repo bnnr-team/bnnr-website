@@ -23,7 +23,7 @@ const notebooks = [
   {
     title: "Detection Demo",
     description:
-      "YOLOv8 on COCO128: bbox-aware augmentations, mAP, and three-panel detection XAI (install bnnr ≥ 0.2.9 on Colab)",
+      "YOLOv8 on COCO128: bbox-aware augmentations, mAP, and three-panel detection XAI (install bnnr ≥ 0.3.0 on Colab)",
     link: "https://colab.research.google.com/github/bnnr-team/bnnr/blob/main/examples/detection/bnnr_detection_demo.ipynb",
   },
 ];

@@ -88,7 +88,9 @@ YAML
 
 **Multi-label classification:** `python -m bnnr train` with built-in datasets (`cifar10`, `mnist`, `imagefolder`, …) always uses single-label heads and `CrossEntropyLoss`. Putting `task: multilabel` in YAML **does not** switch the CLI to multi-label. Use the Python API (`task="multilabel"`, `SimpleTorchAdapter(multilabel=True)`, `BCEWithLogitsLoss`) or `examples/multilabel/multilabel_demo.py` — see [Configuration](/docs/configuration/), [Golden Path](/docs/golden-path/), [CLI Reference](/docs/cli/), and [Examples Guide](/docs/examples/).
 
-**Object detection:** BNNR **v0.2.9+** on PyPI supports object detection with `task="detection"`. Use `DetectionAdapter` (torchvision) or `UltralyticsDetectionAdapter` (YOLOv8) as your model adapter, with bbox-aware augmentations and mAP metrics. Detection requires the Python API — see [Detection](/docs/detection/) for the full guide and [Examples Guide](/docs/examples/) for ready-to-run scripts.
+**Object detection:** BNNR **v0.3.0+** on PyPI supports object detection with `task="detection"`. Use `DetectionAdapter` (torchvision) or `UltralyticsDetectionAdapter` (YOLOv8) as your model adapter, with bbox-aware augmentations and mAP metrics. Detection requires the Python API — see [Detection](/docs/detection/) for the full guide and [Examples Guide](/docs/examples/) for ready-to-run scripts.
+
+**Model analysis (new in v0.3.0):** Run `python -m bnnr analyze --model best.pt --data cifar10 --output ./out` to get a full diagnostic report (metrics, XAI, failure patterns, recommendations) on any trained model — no retraining required. See [Model Analysis](/docs/analyze/) for the complete guide.
 
 ## 5) First run in live dashboard mode (recommended)
 

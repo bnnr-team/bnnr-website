@@ -9,6 +9,7 @@ const footerLinks = {
   ],
   Resources: [
     { label: "API Reference", href: "/docs/api-reference/" },
+    { label: "Model Analysis", href: "/docs/analyze/" },
     { label: "CLI Reference", href: "/docs/cli/" },
     { label: "Configuration", href: "/docs/configuration/" },
     { label: "Augmentations", href: "/docs/augmentations/" },
@@ -94,7 +95,7 @@ export function Footer() {
               PyTorch 2.0+
             </span>
             <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs font-mono" style={{ background: "var(--code-bg)", color: "var(--muted)", border: "1px solid var(--code-border)" }}>
-              v0.2.9
+              v0.3.0
             </span>
           </div>
         </div>
