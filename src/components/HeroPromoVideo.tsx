@@ -7,7 +7,7 @@ export function HeroPromoVideo() {
     <section className="py-12 md:py-16">
       <div className="max-w-5xl mx-auto px-4">
         <p className="text-center text-sm mb-4" style={{ color: "var(--muted)" }}>
-          Full pipeline demo with audio (4K source, ~53s)
+          Original demo recording with audio (4K, ~53s) — press Play
         </p>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -18,13 +18,11 @@ export function HeroPromoVideo() {
           <video
             src="/hero-promo.mp4"
             controls
-            preload="metadata"
+            preload="auto"
             poster="/hero-promo-poster.jpg"
             className="w-full h-auto bg-black"
             playsInline
-          >
-            <a href="/hero-promo.mp4">Download demo video (MP4 with audio)</a>
-          </video>
+          />
         </motion.div>
       </div>
     </section>
