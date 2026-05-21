@@ -5,7 +5,10 @@ import { motion } from "framer-motion";
 export function HeroPromoVideo() {
   return (
     <section className="py-12 md:py-16">
-      <div className="max-w-4xl mx-auto px-4">
+      <div className="max-w-5xl mx-auto px-4">
+        <p className="text-center text-sm mb-4" style={{ color: "var(--muted)" }}>
+          Full pipeline demo with audio (4K source, ~53s)
+        </p>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -20,7 +23,7 @@ export function HeroPromoVideo() {
             className="w-full h-auto bg-black"
             playsInline
           >
-            <a href="/hero-promo.mp4">Download demo video (MP4)</a>
+            <a href="/hero-promo.mp4">Download demo video (MP4 with audio)</a>
           </video>
         </motion.div>
       </div>
