@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 const LINES = [
   { type: "prompt", text: "$ " },
   { type: "command", text: 'pip install "bnnr[dashboard]"' },
-  { type: "output", text: "Successfully installed bnnr-0.3.0" },
+  { type: "output", text: "Successfully installed bnnr-0.3.1" },
   { type: "blank", text: "" },
   { type: "prompt", text: "$ " },
   { type: "command", text: "python -m bnnr train --dataset cifar10 --preset light --with-dashboard" },
@@ -13,7 +13,7 @@ const LINES = [
   { type: "prompt", text: "$ " },
   { type: "command", text: "python -m bnnr quickstart" },
   { type: "blank", text: "" },
-  { type: "banner", text: "BNNR v0.3.0 — Train → Explain → Improve → Prove" },
+  { type: "banner", text: "BNNR v0.3.1 — Train → Explain → Improve → Prove" },
   { type: "blank", text: "" },
   { type: "output", text: "▸ Dataset:    CIFAR-10 (32×32, 10 classes)" },
   { type: "output", text: "▸ Device:     auto" },

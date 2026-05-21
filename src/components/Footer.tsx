@@ -96,7 +96,7 @@ export function Footer() {
               PyTorch 2.0+
             </span>
             <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs font-mono" style={{ background: "var(--code-bg)", color: "var(--muted)", border: "1px solid var(--code-border)" }}>
-              v0.3.0
+              v0.3.1
             </span>
           </div>
         </div>
