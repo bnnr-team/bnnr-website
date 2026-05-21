@@ -17,7 +17,8 @@ const footerLinks = {
   Community: [
     { label: "GitHub", href: "https://github.com/bnnr-team/bnnr" },
     { label: "Issues", href: "https://github.com/bnnr-team/bnnr/issues" },
-    { label: "Discussions", href: "https://github.com/orgs/bnnr-team/discussions" },
+    { label: "Discussions", href: "https://github.com/bnnr-team/bnnr/discussions" },
+    { label: "Contributing (GitHub)", href: "https://github.com/bnnr-team/bnnr/blob/main/CONTRIBUTING.md" },
     { label: "Contributing", href: "/community/" },
   ],
 };

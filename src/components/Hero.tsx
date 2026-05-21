@@ -14,8 +14,8 @@ export function Hero() {
 
   const isDark = mounted && resolvedTheme === "dark";
   const logoSrc = isDark
-    ? "/logos/logo_czarne.PNG"
-    : "/logos/logo_biale.PNG";
+    ? "/logos/logo-icon-dark.png"
+    : "/logos/logo-icon-white.png";
 
   return (
     <section className="relative overflow-hidden">
@@ -70,9 +70,9 @@ export function Hero() {
                 </span>
               </h1>
               <p className="text-lg md:text-xl leading-relaxed mb-6" style={{ color: "var(--muted)" }}>
-                Make PyTorch vision models production-ready. XAI diagnostics,
-                intelligent augmentation, and evidence-based reporting —
-                in one closed-loop toolkit.
+                BNNR automatically improves your PyTorch vision models using XAI —
+                find what your model gets wrong, fix it with intelligent augmentation,
+                and prove the result with structured reports and a live dashboard.
               </p>
 
               {/* Pipeline one-liner */}

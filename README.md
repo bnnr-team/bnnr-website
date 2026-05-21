@@ -69,6 +69,27 @@ Vercel automatically provisions SSL certificates.
 └── package.json
 ```
 
+## Keeping docs in sync with the library repo
+
+Documentation on this site is **hand-maintained** in `src/app/docs/*.mdx` — it does not auto-sync from [bnnr-team/bnnr](https://github.com/bnnr-team/bnnr).
+
+After a BNNR release or README/CLI change, update the website in this order:
+
+1. **CLI / quickstart** — align with `bnnr/docs/getting_started.md` and `bnnr/docs/cli.md`:
+   - `src/app/docs/getting-started/page.mdx`
+   - `src/app/docs/cli/page.mdx`
+   - `src/app/docs/dashboard/page.mdx` (first-run examples)
+2. **Homepage** — match `bnnr/README.md` messaging and commands:
+   - `src/components/Hero.tsx`, `TerminalAnimation.tsx`
+   - Copy new assets from `bnnr/docs/assets/` into `public/` (dashboard, xai, hero video)
+3. **Community links** — use repo-level URLs:
+   - Discussions: `https://github.com/bnnr-team/bnnr/discussions`
+   - Issue forms: `?template=bug_report.yml`, `?template=feature_request.yml`
+   - Contributing: `https://github.com/bnnr-team/bnnr/blob/main/CONTRIBUTING.md`
+4. **Verify** — `npm run build`, then spot-check `/docs/getting-started`, `/community`, homepage.
+
+Canonical **Discussions** URL: `https://github.com/bnnr-team/bnnr/discussions` (not org-level).
+
 ## License
 
 MIT — same as the [BNNR library](https://github.com/bnnr-team/bnnr).

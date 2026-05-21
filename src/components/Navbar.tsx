@@ -22,7 +22,7 @@ export function Navbar() {
   useEffect(() => setMounted(true), []);
 
   const isDark = resolvedTheme === "dark";
-  const logoSrc = isDark ? "/logos/napis_czarne.PNG" : "/logos/napis_biale.PNG";
+  const logoSrc = isDark ? "/logos/logo-dark.png" : "/logos/logo-white.png";
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-[var(--border-color)]"

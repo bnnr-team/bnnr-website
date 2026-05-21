@@ -20,7 +20,8 @@ export const metadata: Metadata = {
     "deep learning",
     "model validation",
     "model quality",
-    "production-ready",
+    "ICD",
+    "AICD",
     "CV toolkit",
   ],
   icons: {
@@ -36,13 +37,13 @@ export const metadata: Metadata = {
     description:
       "Train, explain, improve, and prove PyTorch vision models.",
     type: "website",
-    images: ["/logos/napis_logo_czarne.PNG"],
+    images: ["/logos/logo-dark.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "BNNR — Bulletproof Neural Network Recipe",
     description: "Train, explain, improve, and prove PyTorch vision models.",
-    images: ["/logos/napis_logo_czarne.PNG"],
+    images: ["/logos/logo-dark.png"],
   },
 };
 

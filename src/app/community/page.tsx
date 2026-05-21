@@ -8,7 +8,6 @@ import {
   Lightbulb,
   BookOpen,
   ExternalLink,
-  Terminal,
   GitPullRequest,
   Code2,
 } from "lucide-react";
@@ -49,22 +48,36 @@ const links = [
     icon: <MessageSquare size={24} />,
     title: "Discussions",
     description: "Ask questions, share ideas, and connect with other users.",
-    href: "https://github.com/orgs/bnnr-team/discussions",
+    href: "https://github.com/bnnr-team/bnnr/discussions",
     cta: "Join Discussions",
   },
   {
     icon: <Bug size={24} />,
     title: "Report a Bug",
     description: "Found a bug? Open an issue with reproduction steps.",
-    href: "https://github.com/bnnr-team/bnnr/issues/new?template=bug_report.md",
+    href: "https://github.com/bnnr-team/bnnr/issues/new?template=bug_report.yml",
     cta: "Report Bug",
   },
   {
     icon: <Lightbulb size={24} />,
     title: "Feature Request",
     description: "Have an idea for a new feature or improvement?",
-    href: "https://github.com/bnnr-team/bnnr/issues/new?template=feature_request.md",
+    href: "https://github.com/bnnr-team/bnnr/issues/new?template=feature_request.yml",
     cta: "Request Feature",
+  },
+  {
+    icon: <GitPullRequest size={24} />,
+    title: "Contributing Guide",
+    description: "Dev setup, tests, PR workflow, and good first issues.",
+    href: "https://github.com/bnnr-team/bnnr/blob/main/CONTRIBUTING.md",
+    cta: "Read CONTRIBUTING",
+  },
+  {
+    icon: <Code2 size={24} />,
+    title: "Good First Issues",
+    description: "Starter tasks for new contributors.",
+    href: "https://github.com/bnnr-team/bnnr/issues?q=label%3A%22good+first+issue%22",
+    cta: "Browse Issues",
   },
 ];
 
@@ -133,102 +146,20 @@ export default function CommunityPage() {
           Contributing
         </h2>
         <div className="card">
-          <p className="text-sm mb-6 leading-relaxed" style={{ color: "var(--muted)" }}>
-            We welcome contributions of all sizes. Here is how to get started:
+          <p className="text-sm mb-4 leading-relaxed" style={{ color: "var(--muted)" }}>
+            Full contributor guide (dev setup, tests, PR workflow, good first issues) lives in the
+            library repository — kept in sync with the CLI and CI.
           </p>
-
-          <div className="space-y-6">
-            {/* Dev setup */}
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <Terminal size={16} style={{ color: "var(--accent)" }} />
-                <h4 className="text-sm font-semibold" style={{ color: "var(--fg)" }}>
-                  Development Setup
-                </h4>
-              </div>
-              <pre className="!text-xs">
-                <code>{`# Clone the repository
-git clone https://github.com/bnnr-team/bnnr.git
-cd bnnr
-
-# Install in editable mode with dev dependencies
-pip install -e ".[dev,dashboard,gpu]"
-
-# Run tests
-pytest tests/ -v
-
-# Run linting
-ruff check src/
-mypy src/bnnr/`}</code>
-              </pre>
-            </div>
-
-            {/* Guidelines */}
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <GitPullRequest size={16} style={{ color: "var(--accent)" }} />
-                <h4 className="text-sm font-semibold" style={{ color: "var(--fg)" }}>
-                  Pull Request Guidelines
-                </h4>
-              </div>
-              <div className="grid sm:grid-cols-2 gap-2">
-                {[
-                  "Fork the repo and create a feature branch",
-                  "Write tests for new functionality",
-                  "Ensure all tests pass before submitting",
-                  "Follow the existing code style",
-                  "Update documentation for API changes",
-                  "Keep PRs focused and well-scoped",
-                ].map((item, i) => (
-                  <div
-                    key={i}
-                    className="flex items-start gap-2 p-2 rounded-lg"
-                    style={{ background: "var(--code-bg)" }}
-                  >
-                    <div className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
-                      style={{ background: "var(--accent)" }} />
-                    <span className="text-xs" style={{ color: "var(--fg)" }}>
-                      {item}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Areas */}
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <Code2 size={16} style={{ color: "var(--accent)" }} />
-                <h4 className="text-sm font-semibold" style={{ color: "var(--fg)" }}>
-                  Areas for Contribution
-                </h4>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {[
-                  "New augmentations",
-                  "Additional XAI methods",
-                  "Model adapter integrations",
-                  "Dashboard enhancements",
-                  "Documentation improvements",
-                  "Example notebooks",
-                  "Performance optimizations",
-                  "Bug fixes",
-                ].map((area) => (
-                  <span
-                    key={area}
-                    className="px-3 py-1 rounded-full text-xs font-medium"
-                    style={{
-                      background: "rgba(240,160,105,0.1)",
-                      border: "1px solid rgba(240,160,105,0.2)",
-                      color: "var(--accent)",
-                    }}
-                  >
-                    {area}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
+          <a
+            href="https://github.com/bnnr-team/bnnr/blob/main/CONTRIBUTING.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary inline-flex items-center gap-2 text-sm"
+          >
+            <GitPullRequest size={16} />
+            CONTRIBUTING.md on GitHub
+            <ExternalLink size={14} />
+          </a>
         </div>
       </section>
 
