@@ -15,11 +15,12 @@ export function HeroPromoVideo() {
           <video
             src="/hero-promo.mp4"
             controls
+            preload="metadata"
             poster="/hero-promo-poster.jpg"
-            className="w-full h-auto"
+            className="w-full h-auto bg-black"
             playsInline
           >
-            Your browser does not support the video tag.
+            <a href="/hero-promo.mp4">Download demo video (MP4)</a>
           </video>
         </motion.div>
       </div>
