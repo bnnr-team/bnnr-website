@@ -7,7 +7,10 @@ import { ExternalLink } from "lucide-react";
 
 const DASHBOARD_SHOTS = [
   { src: "/dashboard/dashboard-overview.png", alt: "Dashboard overview" },
-  { src: "/dashboard/dashboard-tree.png", alt: "Branch tree" },
+  {
+    src: "/dashboard/branch-tree-improvements.png",
+    alt: "Branch tree — test improvements before you commit",
+  },
   { src: "/dashboard/dashboard-metrics.png", alt: "Metrics" },
   { src: "/dashboard/dashboard-samples.png", alt: "Samples and XAI" },
   { src: "/dashboard/dashboard-analysis.png", alt: "Analysis" },

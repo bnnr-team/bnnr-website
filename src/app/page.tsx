@@ -1,5 +1,6 @@
 import { Hero } from "@/components/Hero";
 import { HeroPromoVideo } from "@/components/HeroPromoVideo";
+import { StoryProofSection } from "@/components/StoryProofSection";
 import { HowItWorks } from "@/components/HowItWorks";
 import { XaiProofSection } from "@/components/XaiProofSection";
 import { BenchmarksSection } from "@/components/BenchmarksSection";
@@ -14,6 +15,7 @@ export default function Home() {
     <>
       <Hero />
       <HeroPromoVideo />
+      <StoryProofSection />
       <XaiProofSection />
       <BenchmarksSection />
       <HowItWorks />
