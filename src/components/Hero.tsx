@@ -75,13 +75,17 @@ export function Hero() {
                 and prove the result with structured reports and a live dashboard.
               </p>
               <p className="text-sm leading-relaxed mb-6" style={{ color: "var(--muted)" }}>
-                Already trained a model? Use{" "}
+                Zero flags:{" "}
                 <code className="text-xs px-1.5 py-0.5 rounded" style={{ background: "var(--code-bg)" }}>
-                  bnnr analyze
+                  python -m bnnr demo
                 </code>{" "}
-                for metrics, XAI, and failure analysis without retraining —{" "}
-                <Link href="/docs/analyze/" className="underline" style={{ color: "var(--accent)" }}>
-                  docs
+                for a ~1 min CIFAR-10 run with live dashboard, or{" "}
+                <code className="text-xs px-1.5 py-0.5 rounded" style={{ background: "var(--code-bg)" }}>
+                  python -m bnnr quickstart
+                </code>{" "}
+                for the interactive wizard —{" "}
+                <Link href="/docs/getting-started/" className="underline" style={{ color: "var(--accent)" }}>
+                  getting started
                 </Link>
                 .
               </p>

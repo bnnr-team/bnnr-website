@@ -5,7 +5,6 @@ import { XaiProofSection } from "@/components/XaiProofSection";
 import { BenchmarksSection } from "@/components/BenchmarksSection";
 import { FeaturesSection } from "@/components/FeaturesSection";
 import { CodeShowcase } from "@/components/CodeShowcase";
-import { DashboardPreview } from "@/components/DashboardPreview";
 import { AugmentationStrip } from "@/components/AugmentationStrip";
 import { StatsBar } from "@/components/StatsBar";
 
@@ -19,7 +18,6 @@ export default function Home() {
       <HowItWorks />
       <FeaturesSection />
       <CodeShowcase />
-      <DashboardPreview />
       <AugmentationStrip />
       <StatsBar />
     </>
