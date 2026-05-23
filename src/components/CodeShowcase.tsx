@@ -3,24 +3,38 @@
 import { useState } from "react";
 import { Copy, Check } from "lucide-react";
 
-const CLASSIFICATION_CODE = `from bnnr import quick_run, BNNRConfig
+const CLI_CODE = `# Zero flags — CIFAR-10 demo, ICD preset, live dashboard (~1 min)
+python -m bnnr demo
 
-result = quick_run(
+# Interactive wizard (dataset, preset, sample limits)
+python -m bnnr quickstart
+
+# Full training with built-in defaults
+python -m bnnr train --dataset cifar10 --preset light --with-dashboard`;
+
+const PYTHON_CODE = `import bnnr
+
+# One-liner when you already have model + loaders
+result = bnnr.quick_run(model, train_loader, val_loader)
+print(result.best_metrics)
+
+# Smoke test: one epoch, one augmentation branch
+result = bnnr.quick_run(
     model, train_loader, val_loader,
-    config=BNNRConfig(
-        m_epochs=5,
-        max_iterations=3,
-        device="auto",
-    )
-)
-print(f"Best: {result.best_metrics}")
-# Best: {'accuracy': 0.847, 'f1_macro': 0.845}`;
+    m_epochs=1,
+    max_iterations=1,
+)`;
+
+type Tab = "cli" | "python";
 
 export function CodeShowcase() {
+  const [tab, setTab] = useState<Tab>("cli");
   const [copied, setCopied] = useState(false);
 
+  const code = tab === "cli" ? CLI_CODE : PYTHON_CODE;
+
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(CLASSIFICATION_CODE);
+    await navigator.clipboard.writeText(code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -36,14 +50,37 @@ export function CodeShowcase() {
           API
         </h2>
         <p className="section-subtitle text-center max-w-2xl mx-auto">
-          Train image classifiers with a minimal, consistent API — from baseline to
-          augmentation search and live monitoring.
+          Start from the CLI with <code className="text-xs">python -m bnnr demo</code>, or plug
+          BNNR into your existing PyTorch training loop with <code className="text-xs">quick_run</code>.
         </p>
 
         <div className="max-w-3xl mx-auto">
+          <div className="flex gap-2 mb-3">
+            {(
+              [
+                { id: "cli" as const, label: "CLI" },
+                { id: "python" as const, label: "Python API" },
+              ] as const
+            ).map(({ id, label }) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setTab(id)}
+                className="text-sm px-3 py-1.5 rounded-lg transition-colors"
+                style={{
+                  background: tab === id ? "rgba(240,160,105,0.15)" : "transparent",
+                  border: `1px solid ${tab === id ? "rgba(240,160,105,0.4)" : "var(--border-color)"}`,
+                  color: tab === id ? "var(--accent)" : "var(--muted)",
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
           <div className="relative group">
             <pre className="!rounded-tl-none">
-              <code className="text-sm leading-relaxed">{CLASSIFICATION_CODE}</code>
+              <code className="text-sm leading-relaxed">{code}</code>
             </pre>
             <button
               onClick={handleCopy}
@@ -53,6 +90,7 @@ export function CodeShowcase() {
                 border: "1px solid var(--border-color)",
                 color: "var(--muted)",
               }}
+              aria-label="Copy code"
             >
               {copied ? <Check size={16} /> : <Copy size={16} />}
             </button>

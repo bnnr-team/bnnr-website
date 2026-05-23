@@ -2,7 +2,6 @@ import { Hero } from "@/components/Hero";
 import { HeroPromoVideo } from "@/components/HeroPromoVideo";
 import { HowItWorks } from "@/components/HowItWorks";
 import { XaiProofSection } from "@/components/XaiProofSection";
-import { BenchmarksSection } from "@/components/BenchmarksSection";
 import { FeaturesSection } from "@/components/FeaturesSection";
 import { CodeShowcase } from "@/components/CodeShowcase";
 import { AugmentationStrip } from "@/components/AugmentationStrip";
@@ -14,7 +13,6 @@ export default function Home() {
       <Hero />
       <HeroPromoVideo />
       <XaiProofSection />
-      <BenchmarksSection />
       <HowItWorks />
       <FeaturesSection />
       <CodeShowcase />
