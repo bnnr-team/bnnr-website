@@ -6,9 +6,9 @@ import "@/styles/globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bnnr.dev"),
-  title: "BNNR — XAI-driven PyTorch toolkit for computer vision",
+  title: "BNNR — Bulletproof Neural Network Recipe",
   description:
-    "Audit vision models with heatmaps and structured reports. Improve with ICD/AICD augmentations and a live training dashboard. Open source, MIT.",
+    "Train, explain, improve, and prove PyTorch vision models — with XAI diagnostics, intelligent augmentation, and a real-time dashboard.",
   keywords: [
     "BNNR",
     "PyTorch",
@@ -33,18 +33,17 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "BNNR — XAI-driven PyTorch toolkit for computer vision",
+    title: "BNNR — Bulletproof Neural Network Recipe",
     description:
-      "Audit vision models with heatmaps and structured reports. Improve with XAI-guided augmentation.",
+      "Train, explain, improve, and prove PyTorch vision models.",
     type: "website",
-    images: ["/story/xai-same-accuracy-diff-behavior.png"],
+    images: ["/logos/logo-dark.png"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "BNNR — XAI-driven PyTorch toolkit for computer vision",
-    description:
-      "Audit vision models with heatmaps and structured reports. Open source, MIT.",
-    images: ["/story/xai-same-accuracy-diff-behavior.png"],
+    title: "BNNR — Bulletproof Neural Network Recipe",
+    description: "Train, explain, improve, and prove PyTorch vision models.",
+    images: ["/logos/logo-dark.png"],
   },
 };
 

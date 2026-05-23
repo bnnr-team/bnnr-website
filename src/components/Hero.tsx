@@ -62,31 +62,28 @@ export function Hero() {
             </div>
 
             <div>
-              <p className="text-sm font-semibold uppercase tracking-wide mb-3" style={{ color: "var(--accent)" }}>
-                Open-source PyTorch · MIT
-              </p>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-4"
                 style={{ color: "var(--fg)" }}>
-                Audit why your vision model{" "}
+                Bulletproof Neural{" "}
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-bnnr-300 to-bnnr-500">
-                  fails
+                  Network Recipe
                 </span>
-                {" "}— then fix it with XAI-guided augmentation
               </h1>
               <p className="text-lg md:text-xl leading-relaxed mb-4" style={{ color: "var(--muted)" }}>
-                <strong style={{ color: "var(--fg)" }}>BNNR</strong> (Bulletproof Neural Network Recipe) —
-                structured reports, a live dashboard, and saliency-driven augmentations (ICD / AICD)
-                that test what actually improves your metrics.
+                BNNR automatically improves your PyTorch vision models using XAI —
+                find what your model gets wrong, fix it with intelligent augmentation,
+                and prove the result with structured reports and a live dashboard.
               </p>
               <p className="text-sm leading-relaxed mb-6" style={{ color: "var(--muted)" }}>
-                Lowest-friction start:{" "}
+                Already trained a model? Use{" "}
                 <code className="text-xs px-1.5 py-0.5 rounded" style={{ background: "var(--code-bg)" }}>
                   bnnr analyze
                 </code>{" "}
-                on a checkpoint you already have — metrics, XAI, failure patterns, HTML report.{" "}
+                for metrics, XAI, and failure analysis without retraining —{" "}
                 <Link href="/docs/analyze/" className="underline" style={{ color: "var(--accent)" }}>
-                  Audit in 60s
+                  docs
                 </Link>
+                .
               </p>
 
               {/* Pipeline one-liner */}
@@ -118,12 +115,9 @@ export function Hero() {
 
             {/* CTAs */}
             <div className="flex flex-wrap gap-4">
-              <Link href="/docs/analyze/" className="btn-primary">
-                Audit a model
+              <Link href="/docs/getting-started/" className="btn-primary">
+                Get Started
                 <ArrowRight size={18} />
-              </Link>
-              <Link href="/docs/getting-started/" className="btn-outline">
-                Run demo
               </Link>
               <a
                 href="https://github.com/bnnr-team/bnnr"
@@ -132,12 +126,12 @@ export function Hero() {
                 className="btn-outline"
               >
                 <Github size={18} />
-                GitHub
+                View on GitHub
               </a>
             </div>
 
             {/* Quick install */}
-            <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-3">
+            <div className="flex items-center gap-3">
               <code className="px-4 py-2 rounded-lg text-sm font-mono"
                 style={{
                   background: "var(--code-bg)",
@@ -145,14 +139,6 @@ export function Hero() {
                   color: "var(--fg)",
                 }}>
                 pip install &quot;bnnr[dashboard]&quot;
-              </code>
-              <code className="px-4 py-2 rounded-lg text-sm font-mono"
-                style={{
-                  background: "var(--code-bg)",
-                  border: "1px solid var(--code-border)",
-                  color: "var(--fg)",
-                }}>
-                python -m bnnr demo
               </code>
             </div>
           </div>
