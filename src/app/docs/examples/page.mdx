@@ -1,5 +1,6 @@
 # Examples Guide (Production Usage)
 
+
 ## What you will find here
 A practical guide for Python scripts under `examples/` (for example `examples/classification/`, `examples/multilabel/`) with:
 - what each script demonstrates,
@@ -7,7 +8,7 @@ A practical guide for Python scripts under `examples/` (for example `examples/cl
 - which dashboard flow to use,
 - smoke commands for fast verification.
 
-These paths assume a **cloned repository** with installs from source (`pip install -e ".[…]"`). They are not shipped inside the PyPI wheel; see the [BNNR repository on GitHub](https://github.com/bnnr-team/bnnr).
+These paths assume a **cloned repository** with installs from source (`pip install -e ".[…]"`). They are not shipped inside the PyPI wheel; see the root [README.md](../README.md).
 
 ## 1) Classification showcase
 
@@ -35,6 +36,30 @@ PYTHONPATH=src python3 examples/classification/showcase_stl10.py \
 ```
 
 **First run:** STL-10 is downloaded automatically (needs network). For a shorter interactive run, the script supports `--quick`; see the module docstring for timings and GPU/CPU notes.
+
+## 1b) Torchvision ResNet-18 → analyze (CIFAR-10)
+
+Script:
+- `examples/classification/torchvision_analyze_cifar10.py`
+
+What it demonstrates:
+- torchvision `resnet18` + `SimpleTorchAdapter` + `analyze_model` (HTML report without `BNNRTrainer`),
+- optional short training on a CIFAR-10 subset or `--checkpoint` for existing weights.
+
+### Quick run (downloads CIFAR-10 once)
+
+```bash
+PYTHONPATH=src python3 examples/classification/torchvision_analyze_cifar10.py --quick
+```
+
+### Fast smoke (CI / no download)
+
+```bash
+PYTHONPATH=src python3 examples/classification/torchvision_analyze_cifar10.py \
+  --output-dir /tmp/torchvision_analyze_out --synthetic --no-xai --device cpu
+```
+
+See [Model Analysis](/docs/analyze/) for the torchvision checkpoint workflow.
 
 ## 2) Multi-label showcase
 
@@ -92,14 +117,32 @@ See the module docstring and inline comments for wiring; also [API Reference](/d
 
 ## 5) Detection showcases
 
-### YOLO + COCO128
+### 5a) Ultralytics YOLO (SDK)
+
+Scripts:
+- `examples/integrations/ultralytics_yolo_quickstart.py` — copy-paste CLI for maintainers
+- `examples/detection/bnnr_detection_demo.ipynb` — interactive COCO128 + YOLOv8n
+
+What they demonstrate:
+- `UltralyticsDetectionAdapter` (not `yolo train` CLI),
+- COCO128 auto-download via `bnnr.example_data.ensure_coco128_yolo`,
+- bbox-aware augmentations + DetectionICD/AICD,
+- mAP metrics and optional dashboard.
+
+```bash
+pip install "bnnr[ultralytics]"
+PYTHONPATH=src python examples/integrations/ultralytics_yolo_quickstart.py --quick
+```
+
+See also [Integrations](https://github.com/bnnr-team/bnnr/blob/main/docs/integrations.md).
+
+### 5b) YOLO-format data + torchvision detector
 
 Script:
 - `examples/detection/showcase_yolo_coco128.py`
 
 What it demonstrates:
-- YOLOv8 via `UltralyticsDetectionAdapter`,
-- COCO128 auto-download,
+- **YOLO dataset layout** (COCO128 `data.yaml`) with `build_pipeline("yolo")` → **torchvision Faster R-CNN** (not Ultralytics SDK),
 - detection-specific bbox augmentations + DetectionICD/AICD,
 - mAP tracking and dashboard.
 
@@ -157,8 +200,8 @@ After each example run, verify:
 
 ## 8) Related docs
 
-- [Dashboard Guide](/docs/dashboard/)
-- [Artifacts & Outputs](/docs/artifacts/)
-- [Detection](/docs/detection/)
-- [Troubleshooting](/docs/troubleshooting/)
-- [Notebooks Guide](/docs/notebooks/)
+- `dashboard.md`
+- `artifacts.md`
+- `troubleshooting.md`
+- `notebooks.md`
+- `detection.md`

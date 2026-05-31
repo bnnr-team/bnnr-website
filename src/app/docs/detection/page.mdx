@@ -1,20 +1,19 @@
 # Object Detection
 
-BNNR supports object detection as a first-class task since v0.2.0. **Current PyPI release: v0.3.1** (recommended for Ultralytics YOLO + detection XAI fixes).
-The same **Train → Explain → Improve → Prove** loop applies: train a detector, generate XAI saliency for bounding boxes, improve with detection-aware augmentations and ICD/AICD, and prove with mAP metrics and structured reports.
 
----
+BNNR supports object detection as a first-class task since v0.2.0.
+The same Train → Explain → Improve → Prove loop applies: train a detector, generate XAI saliency for bounding boxes, improve with detection-aware augmentations and ICD/AICD, and prove with mAP metrics and structured reports.
 
-## Supported Models
+## Supported models
 
-### Torchvision Detectors
+### Torchvision detectors
 
 Any torchvision-style model whose `forward` returns losses in train mode and prediction dicts in eval mode:
 
-- **Faster R-CNN** (`fasterrcnn_resnet50_fpn`)
-- **RetinaNet** (`retinanet_resnet50_fpn`)
-- **SSD** (`ssd300_vgg16`)
-- **FCOS** (`fcos_resnet50_fpn`)
+- Faster R-CNN (`fasterrcnn_resnet50_fpn`)
+- RetinaNet (`retinanet_resnet50_fpn`)
+- SSD (`ssd300_vgg16`)
+- FCOS (`fcos_resnet50_fpn`)
 
 Wrap with `DetectionAdapter`:
 
@@ -46,6 +45,8 @@ adapter = DetectionAdapter(
 
 ### Ultralytics YOLO
 
+For the Ultralytics SDK path (YOLOv8 weights, COCO128 quickstart, stable URLs for docs PRs), see [Integrations](https://github.com/bnnr-team/bnnr/blob/main/docs/integrations.md).
+
 For YOLOv8 and compatible Ultralytics models, use `UltralyticsDetectionAdapter`:
 
 ```python
@@ -67,15 +68,11 @@ adapter = UltralyticsDetectionAdapter(
 | `num_classes` | `None` | Number of classes (auto-detected if `None`) |
 | `lr` | `1e-3` | Learning rate (used when `optimizer` is `None`) |
 | `optimizer` | `None` | Custom optimizer (built automatically if `None`) |
-| `use_amp` | `False` | Enable automatic mixed precision |
+| `use_amp` | `False` | YOLO `train_step` always uses fp32 loss + plain backward (no `GradScaler` on that path) + grad clipping for stability |
 
-Both adapters implement `train_step`, `eval_step`, `epoch_end_eval`, `epoch_end`, `state_dict`, `load_state_dict`, `get_target_layers`, and `get_model`.
+**Image scale and YOLO loss.** Keep detector images in **[0, 1]** float (BNNR does this end-to-end, including after bbox-aware augmentations that round-trip through uint8). Ultralytics **torch.Tensor** inputs to `predict` must stay in **[0, 1]**—their preprocessor only divides numpy arrays by 255, not tensors. Passing 0–255 floats as tensors triggers warnings and can destabilize training/eval. You do **not** need torchvision `Normalize(mean, std)` for YOLO. If Colab still warns or hits **non-finite** loss, upgrade: `pip install -U bnnr`, or `pip install git+https://github.com/bnnr-team/bnnr.git` until a **PyPI patch** ships.
 
-For raw `ultralytics.nn.tasks` modules without this adapter, detection XAI stays disabled; see [Troubleshooting](/docs/troubleshooting/).
-
----
-
-## Dataset Format
+## Dataset format
 
 Detection datasets must return `(image, target, index)` tuples where:
 
@@ -86,7 +83,7 @@ Detection datasets must return `(image, target, index)` tuples where:
   - Optional: `area`, `iscrowd`, `image_id`
 - `index` — integer sample index
 
-### Collate Functions
+### Collate functions
 
 Standard PyTorch collation doesn't work for variable-length targets. Use the provided collate functions:
 
@@ -103,13 +100,11 @@ train_loader = DataLoader(
 - `detection_collate_fn(batch)` → `(Tensor[B,C,H,W], list[dict])`
 - `detection_collate_fn_with_index(batch)` → `(Tensor[B,C,H,W], list[dict], Tensor[B])`
 
----
+## Detection augmentations
 
-## Detection Augmentations
+All detection augmentations are bbox-aware — they transform both the image and bounding boxes consistently.
 
-All detection augmentations are bbox-aware — they transform both the image and bounding boxes consistently. They subclass `BboxAwareAugmentation`.
-
-### Built-in Transforms
+### Built-in transforms
 
 | Class | Description | Key parameters |
 |-------|-------------|----------------|
@@ -147,8 +142,6 @@ from bnnr.detection_augmentations import get_detection_preset
 augmentations = get_detection_preset("standard")  # "light", "standard", "aggressive"
 ```
 
----
-
 ## Configuration
 
 Set `task="detection"` in `BNNRConfig`:
@@ -166,7 +159,7 @@ config = BNNRConfig(
 )
 ```
 
-### Detection-specific Fields
+### Detection-specific fields
 
 | Field | Default | Description |
 |-------|---------|-------------|
@@ -175,14 +168,15 @@ config = BNNRConfig(
 | `detection_score_threshold` | `0.5` | Confidence threshold for evaluation |
 | `detection_targets_mode` | `"auto"` | Augmentation target mode: `auto`, `image_only`, `bbox_aware` |
 | `detection_class_names` | `None` | Optional list of class names for reports |
+| `detection_nms_threshold` | `0.5` | NMS IoU threshold |
+| `detection_min_box_area` | `16.0` | Minimum box area to keep |
+| `detection_max_truncation` | `0.7` | Maximum box truncation ratio |
+| `detection_xai_method` | `"activation"` | `activation` (backbone heatmap) or `occlusion` |
+| `detection_xai_grid_size` | `3` | Grid size for occlusion XAI |
+| `detection_xai_max_gt_boxes` | `1` | Max GT boxes in XAI panels |
+| `detection_xai_max_pred_boxes` | `1` | Max prediction boxes in XAI panels |
 
-Auto-default behavior:
-- If still at classification defaults, `selection_metric` becomes `map_50`
-- If still at classification defaults, `metrics` becomes `[map_50, map_50_95, loss]`
-
-See [Configuration](/docs/configuration/) for the full field reference including advanced detection fields.
-
-### Detection Metrics
+### Detection metrics
 
 | Metric key | Description |
 |------------|-------------|
@@ -192,8 +186,6 @@ See [Configuration](/docs/configuration/) for the full field reference including
 
 Per-class AP and confusion matrices are computed automatically during evaluation.
 
----
-
 ## Detection XAI
 
 BNNR generates detection-specific XAI visualizations:
@@ -202,19 +194,9 @@ BNNR generates detection-specific XAI visualizations:
 - **Occlusion sensitivity** — per-box saliency via systematic occlusion grids
 - **Triptych panels** — ground-truth boxes, saliency overlay, and prediction boxes side by side
 
-XAI is generated automatically when `xai_enabled=True` (default). For Ultralytics models, use `UltralyticsDetectionAdapter` to enable full XAI support.
+XAI is generated automatically when `xai_enabled=True` (default). For Ultralytics models, use `UltralyticsDetectionAdapter` to enable full XAI support; raw `ultralytics.nn.tasks` modules have limited XAI (see [troubleshooting.md §17](/docs/troubleshooting/)).
 
-### XAI API
-
-- `generate_detection_saliency(model, images, target_layers, device, forward_layout)` — backbone activation–based saliency
-- `compute_detection_box_saliency_occlusion(...)` — per-box occlusion grid saliency
-- `draw_boxes_on_image(...)` — draw xyxy boxes with labels, scores, and class names
-- `overlay_saliency_heatmap(...)` — blend saliency with colormap
-- `save_detection_xai_panels(...)` — writes ground-truth, saliency, and prediction panels
-
----
-
-## Full Example
+## Full example
 
 ```python
 import torch
@@ -251,21 +233,15 @@ result = trainer.run()
 print(f"Best mAP@50: {result.best_metrics}")
 ```
 
----
-
-## Examples and Notebooks
+## Examples and notebooks
 
 - `examples/detection/showcase_yolo_coco128.py` — YOLO + COCO128 with auto-download, dashboard, and mAP tracking
 - `examples/detection/showcase_voc.py` — Pascal VOC 2007 with full augmentation suite and XAI saliency
 - `examples/detection/bnnr_detection_demo.ipynb` — interactive Jupyter notebook
 
-See [Examples Guide](/docs/examples/) for run commands and smoke tests.
-
----
-
-## Related Docs
+## Related docs
 
 - [Configuration](/docs/configuration/) — all config fields including detection
 - [API Reference](/docs/api-reference/) — full detection API listing
 - [Augmentations](/docs/augmentations/) — augmentation presets and registration
-- [Troubleshooting](/docs/troubleshooting/) — Ultralytics edge cases
+- [Troubleshooting](/docs/troubleshooting/) — Ultralytics edge cases (§17)

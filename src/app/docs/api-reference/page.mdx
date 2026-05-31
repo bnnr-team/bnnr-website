@@ -1,5 +1,6 @@
 # Python API Reference
 
+
 ## What you will find here
 User-facing Python API for integrating BNNR with your own model and dataloaders.
 
@@ -8,107 +9,107 @@ Use this when CLI presets are not enough and you need full control.
 
 ## Source of truth
 
-This page documents only symbols exported publicly from `src/bnnr/__init__.py`.
+Implemented in `src/bnnr/`. The package exposes two import tiers:
 
-## Core training API
+1. **Stable API** — names in `bnnr.__all__` (recommended for new code).
+2. **Backward-compatible imports** — additional names importable as `from bnnr import …` but emit `DeprecationWarning`; prefer `from bnnr.<subpackage> import …` (see [tests/test_backward_compat.py](https://github.com/bnnr-team/bnnr/blob/main/tests/test_backward_compat.py)).
 
-- `BNNRConfig`
-- `BNNRTrainer`
-- `quick_run`
-- `BNNRRunResult`
-- `CheckpointInfo`
+Detection, events, config I/O, and extended XAI symbols are **not** in `__all__`; import them from the submodules listed below.
+
+## Stable API (`bnnr.__all__`)
+
+| Symbol | Role |
+|--------|------|
+| `__version__` | Package version string |
+| `BNNRConfig`, `BNNRTrainer` | Config model and training loop |
+| `quick_run` | One-call classification training |
+| `ModelAdapter`, `SimpleTorchAdapter` | Model integration protocols |
+| `BNNRRunResult`, `Reporter`, `load_report`, `compare_runs` | Run outputs and comparison |
+| `BaseAugmentation`, `BasicAugmentation`, `ChurchNoise` | Core augmentation types |
+| `ICD`, `AICD` | Saliency-guided augmentations |
+| `auto_select_augmentations`, `get_preset`, `list_presets` | Preset helpers |
+| `OptiCAMExplainer`, `generate_saliency_maps` | Classification XAI |
+| `start_dashboard` | Live dashboard helper |
+| `analyze_model`, `AnalysisReport` | Standalone model diagnostics |
+
+## Quickstart API (recommended)
+
+- **`quick_run(model, train_loader, val_loader, ...)`** — one-call classification training with `default_train_config()` defaults (`m_epochs=3`, `max_iterations=2`, `device=auto`, XAI on). Infers `target_layers` from the last `Conv2d` when omitted. Set `dashboard=True` to start the live dashboard before `run()` (non-blocking afterward). Override via kwargs, e.g. `m_epochs=1`. Detection and multi-label: see [Golden Path](/docs/golden-path/).
+
+```python
+import bnnr
+
+result = bnnr.quick_run(model, train_loader, val_loader)
+print(result.best_metrics)
+```
+
+Returns `BNNRRunResult`.
+
+## Core training API (low-level)
+
+Stable: `BNNRConfig`, `BNNRTrainer`, `BNNRRunResult`.
+
+Backward-compatible: `CheckpointInfo` — `from bnnr.reporting import CheckpointInfo`.
 
 ## Model adapter API
 
-- `ModelAdapter`
-- `XAICapableModel`
-- `SimpleTorchAdapter`
+Stable: `ModelAdapter`, `SimpleTorchAdapter`.
+
+Backward-compatible: `XAICapableModel` — `from bnnr.adapter import XAICapableModel`.
+
+## Analysis API (standalone model diagnostics)
+
+- `analyze_model(adapter, val_loader, *, task, output_dir, run_data_quality, max_worst, xai_enabled, xai_method, xai_samples, cv_folds, data_quality_max_samples)` — run full analysis (metrics, XAI, data quality, failure analysis, patterns, recommendations) on an adapter and validation loader; returns `AnalysisReport`.
+- `AnalysisReport` — dataclass; core attributes: `metrics`, `per_class_accuracy`, `confusion`, `xai_insights`, `xai_diagnoses`, `xai_quality_summary`, `data_quality_result`, `failure_patterns`, `recommendations`; extended attributes (v0.2+): `schema_version`, `executive_summary`, `findings`, `recommendations_structured`, `class_diagnostics`, `true_distribution`, `pred_distribution`, `distribution_summary`, `failure_patterns_extended`, `xai_quality_per_class`, `xai_examples_per_class`, `data_quality_summary`, `cv_results`, `calibration_summary`, `confusion_pair_xai`, `best_worst_examples`, `analysis_scope`; methods: `save(output_dir)`, `to_html(path)`, `failure_patterns_list()`.
+
+See `analyze.md` for usage and CLI.
 
 ## Reporting and events API
 
-- `Reporter`
-- `load_report`
-- `compare_runs`
-- `JsonlEventSink`
-- `EVENT_SCHEMA_VERSION`
-- `replay_events`
+Stable: `Reporter`, `load_report`, `compare_runs`.
 
-## Config helpers
+Backward-compatible (prefer submodule imports):
 
-- `load_config`
-- `save_config`
-- `validate_config`
-- `merge_configs`
-- `apply_xai_preset`
-- `get_xai_preset`
-- `list_xai_presets`
+- `JsonlEventSink`, `EVENT_SCHEMA_VERSION` (`"2.1"`), `replay_events` — `from bnnr.events import …`
+
+## Config helpers (backward-compatible)
+
+Import from `bnnr.config` (top-level `from bnnr import …` is deprecated):
+
+- `load_config`, `save_config`, `validate_config`, `merge_configs`
+- `apply_xai_preset`, `get_xai_preset`, `list_xai_presets` — presets `xai_light`, `xai_full`, `xai_adaptive`
+
+CLI defaults without YAML: `default_train_config()` (`m_epochs=3`, `max_iterations=2`, `device="auto"`), `default_demo_config()` (`m_epochs=1`, `max_iterations=1`).
 
 ## Augmentation API
 
-- `BaseAugmentation`
-- `AugmentationRegistry`
-- `AugmentationRunner`
-- `TorchvisionAugmentation`
-- `KorniaAugmentation`
-- `AlbumentationsAugmentation`
-- `create_kornia_pipeline`
-- `kornia_available`
-- `albumentations_available`
+Stable: `BaseAugmentation`, `BasicAugmentation`, `ChurchNoise`, `ICD`, `AICD`, `auto_select_augmentations`, `get_preset`, `list_presets`.
 
-Built-in classification augmentations:
+Backward-compatible — `from bnnr.augmentations import …` / `from bnnr.augmentation_runner import …`:
 
-- `ChurchNoise`
-- `BasicAugmentation`
-- `DifPresets`
-- `Drust`
-- `LuxferGlass`
-- `ProCAM`
-- `Smugs`
-- `TeaStains`
+- `AugmentationRegistry`, `AugmentationRunner`, `TorchvisionAugmentation`
+- `DifPresets`, `Drust`, `LuxferGlass`, `ProCAM`, `Smugs`, `TeaStains`
 
-Preset helpers:
+Optional backends — `from bnnr.kornia_aug import …`, `from bnnr.albumentations_aug import …`:
 
-- `auto_select_augmentations`
-- `get_preset`
-- `list_presets`
+- `KorniaAugmentation`, `create_kornia_pipeline`, `kornia_available`
+- `AlbumentationsAugmentation`, `albumentations_available`
 
 ## XAI API (classification)
 
-Explainers and generation:
+Stable: `OptiCAMExplainer`, `generate_saliency_maps`, `ICD`, `AICD`.
 
-- `BaseExplainer`
-- `OptiCAMExplainer`
-- `NMFConceptExplainer`
-- `CRAFTExplainer`
-- `RealCRAFTExplainer`
-- `RecursiveCRAFTExplainer`
-- `generate_saliency_maps`
-- `generate_craft_concepts`
-- `generate_nmf_concepts`
-- `save_xai_visualization`
+Backward-compatible — `from bnnr.xai import …`, `from bnnr.xai_cache import …`, `from bnnr.xai_analysis import …`:
 
-Analysis and scoring:
-
-- `analyze_xai_batch`
-- `analyze_xai_batch_rich`
-- `compute_xai_quality_score`
-- `generate_class_diagnosis`
-- `generate_class_insight`
-- `generate_epoch_summary`
-- `generate_rich_epoch_summary`
-
-Cache:
-
+- Explainers: `BaseExplainer`, `NMFConceptExplainer`, `CRAFTExplainer`, `RealCRAFTExplainer`, `RecursiveCRAFTExplainer`
+- `generate_craft_concepts`, `generate_nmf_concepts`, `save_xai_visualization`
+- `analyze_xai_batch`, `analyze_xai_batch_rich`, `compute_xai_quality_score`
+- `generate_class_diagnosis`, `generate_class_insight`, `generate_epoch_summary`, `generate_rich_epoch_summary`
 - `XAICache`
-
-ICD variants:
-
-- `ICD`
-- `AICD`
 
 ## Dashboard helper
 
-- `start_dashboard`
+- `start_dashboard` — returns the LAN URL when the background server starts, or `None` if optional dashboard dependencies are missing (no misleading localhost URL).
 
 ## Minimal classification integration
 
@@ -135,61 +136,63 @@ result = trainer.run()
 print(result.best_metrics)
 ```
 
-## `quick_run()` helper
-
-`quick_run()` builds `SimpleTorchAdapter` internally.
-
-```python
-from bnnr import quick_run
-
-result = quick_run(
-    model=model,
-    train_loader=train_loader,
-    val_loader=val_loader,
-)
-```
-
-Useful arguments include `augmentations`, `config`/overrides, `criterion`, `optimizer`, `target_layers`, and `eval_metrics`.
-
 ## Detection
 
-### Model Adapters
+Import detection symbols from submodules (top-level `from bnnr import DetectionAdapter` is deprecated).
 
-- `DetectionAdapter(model, optimizer, target_layers=None, device="cuda", scheduler=None, use_amp=False, score_threshold=0.05)` — wraps torchvision-style detectors (Faster R-CNN, RetinaNet, SSD, FCOS). In train mode calls `model(images, targets)` for losses; in eval mode calls `model(images)` for prediction dicts.
-- `UltralyticsDetectionAdapter(model_name="yolov8n.pt", device="cuda", score_threshold=0.05, num_classes=None, lr=1e-3, optimizer=None, use_amp=False)` — wraps Ultralytics YOLO. Exposes `predict_detection_dicts(batch_bchw)` for XAI and probe snapshots.
+### Model adapters
+
+`from bnnr.detection_adapter import DetectionAdapter, UltralyticsDetectionAdapter`
+
+- `DetectionAdapter(model, optimizer, target_layers=None, device="cuda", scheduler=None, use_amp=False, score_threshold=0.05)` — wraps torchvision-style detectors (Faster R-CNN, RetinaNet, SSD, FCOS). In train mode calls `model(images, targets)` for losses; in eval mode calls `model(images)` for prediction dicts. `device` accepts `cuda`, `cpu`, or `auto`.
+- `UltralyticsDetectionAdapter(model_name="yolov8n.pt", device="cuda", score_threshold=0.05, num_classes=None, lr=1e-3, optimizer=None, use_amp=False)` — wraps Ultralytics YOLO. Runs inference via `YOLO.predict` with 0–255 scaling, and exposes `predict_detection_dicts(batch_bchw)` for XAI and probe snapshots.
 
 Both adapters implement `train_step`, `eval_step`, `epoch_end_eval`, `epoch_end`, `state_dict`, `load_state_dict`, `get_target_layers`, and `get_model`.
 
-### Collate Functions
+For raw `ultralytics.nn.tasks` modules without this adapter, detection XAI stays disabled; see [troubleshooting.md §17](/docs/troubleshooting/).
 
-- `detection_collate_fn(batch)` → `(Tensor[B,C,H,W], list[dict])`
-- `detection_collate_fn_with_index(batch)` → `(Tensor[B,C,H,W], list[dict], Tensor[B])`
+### Collate functions
 
-### Detection Augmentations
+`from bnnr.detection_collate import detection_collate_fn, detection_collate_fn_with_index`
 
-Bbox-aware transforms (subclass `BboxAwareAugmentation`):
+- `detection_collate_fn(batch)` → `(Tensor[B,C,H,W], list[dict])` — stack images, keep targets as list
+- `detection_collate_fn_with_index(batch)` → `(Tensor[B,C,H,W], list[dict], Tensor[B])` — same, with sample indices
 
-- `DetectionHorizontalFlip`, `DetectionVerticalFlip`, `DetectionRandomRotate90`
-- `DetectionRandomScale(scale_range=(0.8, 1.2))`
-- `MosaicAugmentation(output_size=(640, 640))`, `DetectionMixUp(alpha_range=(0.3, 0.7))`
-- `AlbumentationsBboxAugmentation(transform)`
+### Detection augmentations
 
-XAI-driven: `DetectionICD`, `DetectionAICD` — saliency-based tile masking for detection.
+`from bnnr.detection_augmentations import …` — bbox-aware transforms (subclass `BboxAwareAugmentation`):
 
-Presets: `get_detection_preset(name)` with `name` ∈ `{"light", "standard", "aggressive"}`.
+- `DetectionHorizontalFlip` — horizontal flip with bbox mirroring
+- `DetectionVerticalFlip` — vertical flip with bbox mirroring
+- `DetectionRandomRotate90` — 90° rotation with bbox transform
+- `DetectionRandomScale(scale_range=(0.8, 1.2))` — random resize with bbox scaling
+- `MosaicAugmentation(output_size=(640, 640))` — 4-image mosaic composition (requires `set_pool`)
+- `DetectionMixUp(alpha_range=(0.3, 0.7))` — alpha-blend two images with merged targets (requires `set_pool`)
+- `AlbumentationsBboxAugmentation(transform)` — Albumentations wrapper with bbox support
 
-### Detection Metrics
+XAI-driven augmentations:
 
-- `calculate_detection_metrics(predictions, targets, iou_thresholds=None, score_threshold=0.0)` → `{"map_50", "map_50_95"}`
+- `DetectionICD(threshold_percentile=70.0, tile_size=8, fill_strategy="gaussian_blur")` — masks high-saliency (object) tiles
+- `DetectionAICD(threshold_percentile=70.0, tile_size=8, fill_strategy="gaussian_blur")` — masks low-saliency (background) tiles
+
+Presets: `from bnnr.detection_augmentations import get_detection_preset` — `name` ∈ `{"light", "standard", "aggressive"}`.
+
+### Detection metrics
+
+`from bnnr.detection_metrics import …`
+
+- `calculate_detection_metrics(predictions, targets, iou_thresholds=None, score_threshold=0.0)` → `{"map_50": float, "map_50_95": float}`
 - `calculate_per_class_ap(predictions, targets, iou_threshold=0.5, class_names=None)` → per-class AP dict
 - `calculate_detection_confusion_matrix(predictions, targets, num_classes=None, iou_threshold=0.5)` → `{"labels", "matrix"}`
 
 ### Detection XAI
 
-- `generate_detection_saliency(...)` — backbone activation–based class-agnostic saliency
-- `compute_detection_box_saliency_occlusion(...)` — per-box occlusion grid saliency
-- `draw_boxes_on_image(...)` — draw xyxy boxes with labels and scores
-- `overlay_saliency_heatmap(...)` — blend saliency with colormap
-- `save_detection_xai_panels(...)` — writes ground-truth, saliency, and prediction triptych
+`from bnnr.detection_xai import …`
 
-See [Detection](/docs/detection/) for the full guide with examples.
+- `generate_detection_saliency(model, images, target_layers, device="cpu", forward_layout="torchvision_list"|"ultralytics_bchw")` — backbone activation–based class-agnostic saliency
+- `compute_detection_box_saliency_occlusion(...)` — per-box occlusion grid saliency
+- `draw_boxes_on_image(...)` — draw xyxy boxes with optional labels, scores, and class names
+- `overlay_saliency_heatmap(...)` — blend normalized saliency with colormap
+- `save_detection_xai_panels(...)` — writes `{stem}_gt.png`, `{stem}_sal.png`, `{stem}_pred.png` triptych
+
+See [Detection](/docs/detection/) for the full detection guide with examples.

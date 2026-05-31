@@ -71,24 +71,22 @@ Vercel automatically provisions SSL certificates.
 
 ## Keeping docs in sync with the library repo
 
-Documentation on this site is **hand-maintained** in `src/app/docs/*.mdx` — it does not auto-sync from [bnnr-team/bnnr](https://github.com/bnnr-team/bnnr).
+Canonical user docs live in the sibling clone [bnnr-team/bnnr](https://github.com/bnnr-team/bnnr) under `docs/` (code-verified; see `DOCUMENTATION_AUDIT_REPORT.md` there).
 
-After a BNNR release or README/CLI change, update the website in this order:
+From this repo (expects `../bnnr/docs` on disk):
 
-1. **CLI / quickstart** — align with `bnnr/docs/getting_started.md` and `bnnr/docs/cli.md`:
-   - `src/app/docs/getting-started/page.mdx`
-   - `src/app/docs/cli/page.mdx`
-   - `src/app/docs/dashboard/page.mdx` (first-run examples)
-2. **Homepage** — match `bnnr/README.md` messaging and commands:
-   - `src/components/Hero.tsx`, `TerminalAnimation.tsx`
-   - Copy new assets from `bnnr/docs/assets/` into `public/` (dashboard, xai, hero video)
-3. **Community links** — use repo-level URLs:
-   - Discussions: `https://github.com/bnnr-team/bnnr/discussions`
-   - Issue forms: `?template=bug_report.yml`, `?template=feature_request.yml`
-   - Contributing: `https://github.com/bnnr-team/bnnr/blob/main/CONTRIBUTING.md`
-4. **Verify** — `npm run build`, then spot-check `/docs/getting-started`, `/community`, homepage.
+```bash
+python3 scripts/sync_docs_from_bnnr.py
+npm run build
+```
 
-Canonical **Discussions** URL: `https://github.com/bnnr-team/bnnr/discussions` (not org-level).
+The script copies audited pages into `src/app/docs/*/page.mdx`, rewrites internal links to `/docs/.../`, strips PyPI badges, and patches the extended **Augmentations** and **Model Analysis** pages where the site has extra content.
+
+After a release, also check manually:
+
+1. **Homepage** — `src/components/Hero.tsx`, `TerminalAnimation.tsx` vs `bnnr/README.md`
+2. **Assets** — copy new files from `bnnr/docs/assets/` into `public/` when needed
+3. **Community** — Discussions: `https://github.com/bnnr-team/bnnr/discussions` (repo-level, not org-level)
 
 ## License
 
