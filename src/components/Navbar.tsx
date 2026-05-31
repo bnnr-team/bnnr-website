@@ -22,7 +22,9 @@ export function Navbar() {
   useEffect(() => setMounted(true), []);
 
   const isDark = resolvedTheme === "dark";
-  const logoSrc = isDark ? "/logos/logo-dark.png" : "/logos/logo-white.png";
+  const logoSrc = isDark
+    ? "/logos/logo-icon-dark.png"
+    : "/logos/logo-icon-white.png";
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-[var(--border-color)]"
@@ -35,9 +37,9 @@ export function Navbar() {
             <Image
               src={logoSrc}
               alt="BNNR"
-              width={100}
+              width={40}
               height={40}
-              className="h-8 w-auto"
+              className="neon-logo h-9 w-9"
               priority
             />
           ) : (
