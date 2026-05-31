@@ -1,4 +1,7 @@
-# Golden Path: Integrate BNNR Into Your Project
+# Golden Path: Advanced integration
+
+
+> **Start here first:** [`bnnr.quick_run()`](/docs/api-reference/) for classification, or `python -m bnnr demo` for a zero-flag CLI showcase. This page is for custom adapters, multi-label, and detection. Third-party stacks: [Integrations](https://github.com/bnnr-team/bnnr/blob/main/docs/integrations.md).
 
 ## What you will find here
 Production-style, code-first templates for the three supported tasks:
@@ -9,7 +12,7 @@ Production-style, code-first templates for the three supported tasks:
 Each template includes dashboard-first training flow.
 
 ## When to use this page
-Use this after quickstart, when you integrate BNNR into your own training stack.
+Use this after `quick_run` or `bnnr demo`, when you need full control (`BNNRTrainer`, custom loaders, detection, or multi-label).
 
 ## Shared prerequisites
 
@@ -166,7 +169,7 @@ See [Detection](/docs/detection/) for the full guide (adapters, dataset format, 
 
 ## 4) Dashboard operational notes
 
-- `start_dashboard(...)` prints Local URL, Network URL, and terminal QR code.
+- `start_dashboard(...)` prints Local URL, Network URL, and terminal QR code when optional `bnnr[dashboard]` deps are installed; otherwise it prints install hints and returns `None` (events are still written for export/replay).
 - For mobile, phone must be on same network.
 - For secured controls, use token via CLI (`--dashboard-token`) or environment (`BNNR_DASHBOARD_TOKEN`) in serve mode.
 - Export for offline sharing:

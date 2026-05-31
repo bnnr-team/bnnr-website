@@ -19,7 +19,9 @@ BNNR ships with ready-to-use augmentation presets. Choose one based on your need
 | `standard` | ChurchNoise, BasicAug, ProCAM, DifPresets | General-purpose training |
 | `aggressive` | All 8 built-in augmentations | Maximum diversity, robust training |
 | `gpu` | ChurchNoise, ProCAM, DifPresets | Fastest throughput (CUDA required) |
-| `screening` | Same pool as aggressive, uniform probability | API helper for uniform exploration (not exposed as a CLI `--preset`) |
+| `demo` | ICD + ChurchNoise | Used by `python -m bnnr demo`; also via `get_preset("demo")` |
+| `screening` | Same pool as aggressive, uniform probability | API only (`get_preset`); maps to aggressive with uniform probability |
+| `none` | No augmentations | `python -m bnnr train --preset none` only (not in `list-presets`) |
 
 ```python
 from bnnr import auto_select_augmentations, get_preset
@@ -28,7 +30,7 @@ augs_auto = auto_select_augmentations(random_state=42)
 augs_std  = get_preset("standard", random_state=42)
 ```
 
-CLI `--preset` supports: `auto`, `light`, `standard`, `aggressive`, `gpu`.
+CLI `--preset` / `--augmentation-preset` on `train` supports: `auto`, `light`, `standard`, `aggressive`, `gpu`, `none` (unknown names fall back to `auto` with a warning). The `demo` command always uses preset `demo`.
 
 ---
 

@@ -1,5 +1,6 @@
 # Getting Started
 
+
 ## What you will find here
 A step-by-step path for first-time users:
 - installation,
@@ -18,6 +19,12 @@ Use this on a fresh machine or first setup.
 - Python `>=3.10`
 - `pip`
 - Optional GPU support depends on your local PyTorch/CUDA installation
+
+## Try analyze first (no training)
+
+Open the [sample analyze HTML report](https://raw.githack.com/bnnr-team/bnnr/refs/heads/main/docs/assets/analyze-report-sample.html) in your browser — no install required. It shows validation metrics, top confused class pairs, and XAI heatmaps on failure cases from a real MNIST run.
+
+After you install BNNR (below), run `python -m bnnr demo` for a quick training showcase, then see [Model Analysis](/docs/analyze/) for `bnnr analyze` on your own checkpoint.
 
 ## 2) Install BNNR
 
@@ -64,11 +71,35 @@ python -m pip install -e ".[albumentations]"
 
 ```bash
 python -m bnnr --help
+python -m bnnr demo --help
 python -m bnnr train --help
 python -m bnnr dashboard serve --help
 ```
 
-## 4) First training run (no YAML required)
+## 4) 60-second demo (recommended first run)
+
+No config file, no flags:
+
+```bash
+python -m bnnr demo
+```
+
+This downloads CIFAR-10 if needed, trains a small demo CNN with the **`demo`** augmentation preset (ICD + ChurchNoise), opens the live dashboard, and prints paths to your report and XAI heatmaps when finished.
+
+## 5) Python quickstart (`quick_run`)
+
+If you already have a PyTorch model and dataloaders:
+
+```python
+import bnnr
+
+result = bnnr.quick_run(model, train_loader, val_loader)
+print(result.best_metrics)
+```
+
+Defaults match `bnnr train` without YAML (`m_epochs=3`, `max_iterations=2`, `device=auto`, XAI on). Pass `m_epochs=1` for a fast smoke test. See [API Reference](/docs/api-reference/) and [API Reference](/docs/api-reference/).
+
+## 6) First training run (no YAML required)
 
 Built-in defaults apply when you omit `--config`:
 
@@ -95,13 +126,11 @@ xai_enabled: false
 YAML
 ```
 
-**Multi-label classification:** `python -m bnnr train` with built-in datasets (`cifar10`, `mnist`, `imagefolder`, …) always uses single-label heads and `CrossEntropyLoss`. Putting `task: multilabel` in YAML **does not** switch the CLI to multi-label. Use the Python API (`task="multilabel"`, `SimpleTorchAdapter(multilabel=True)`, `BCEWithLogitsLoss`) or `examples/multilabel/multilabel_demo.py` — see [Configuration](/docs/configuration/), [Golden Path](/docs/golden-path/), [CLI Reference](/docs/cli/), and [Examples Guide](/docs/examples/).
+**Multi-label classification:** `python -m bnnr train` with built-in datasets (`mnist`, `fashion_mnist`, `cifar10`, `stl10`, `imagefolder`, …) always uses single-label heads and `CrossEntropyLoss`. Putting `task: multilabel` in YAML **does not** switch the CLI to multi-label. Use the Python API (`task="multilabel"`, `SimpleTorchAdapter(multilabel=True)`, `BCEWithLogitsLoss`) or `examples/multilabel/multilabel_demo.py` — see [Configuration](/docs/configuration/), [Golden Path](/docs/golden-path/), [CLI Reference](/docs/cli/), and [Examples Guide](/docs/examples/).
 
-**Object detection:** BNNR **v0.3.0+** on PyPI supports object detection with `task="detection"`. Use `DetectionAdapter` (torchvision) or `UltralyticsDetectionAdapter` (YOLOv8) as your model adapter, with bbox-aware augmentations and mAP metrics. Detection requires the Python API — see [Detection](/docs/detection/) for the full guide and [Examples Guide](/docs/examples/) for ready-to-run scripts.
+**Object detection:** BNNR supports object detection with `task="detection"`. Use `DetectionAdapter` (torchvision) or `UltralyticsDetectionAdapter` (YOLOv8) as your model adapter, with bbox-aware augmentations and mAP metrics. Detection requires the Python API — see [Detection](/docs/detection/) for the full guide and [Examples Guide](/docs/examples/) for ready-to-run scripts.
 
-**Model analysis (new in v0.3.0):** Run `python -m bnnr analyze --model best.pt --data cifar10 --output ./out` to get a full diagnostic report (metrics, XAI, failure patterns, recommendations) on any trained model — no retraining required. See [Model Analysis](/docs/analyze/) for the complete guide.
-
-## 5) First run in live dashboard mode (recommended)
+## 7) First run in live dashboard mode (recommended)
 
 Run with dashboard enabled (`--with-dashboard` is default):
 
@@ -133,11 +162,13 @@ When using the Python API (not CLI), call `start_dashboard()` **before** `traine
 ```python
 from bnnr import start_dashboard
 
-start_dashboard(config.report_dir)
+url = start_dashboard(config.report_dir)
+# ``url`` is the LAN URL when the server started, or ``None`` if optional
+# ``bnnr[dashboard]`` dependencies are missing (events are still logged).
 result = trainer.run()
 ```
 
-## 6) Open dashboard on desktop and mobile
+## 8) Open dashboard on desktop and mobile
 
 ### Desktop
 
@@ -152,9 +183,9 @@ Open:
 3. Scan QR code in terminal.
 4. Open the URL on phone.
 
-If QR/mobile does not work, see [Troubleshooting](/docs/troubleshooting/) for network blockers.
+If QR/mobile does not work, see `troubleshooting.md` section for network blockers.
 
-## 7) Protect dashboard controls (recommended)
+## 9) Protect dashboard controls (recommended)
 
 For shared/dev-network runs, protect pause/resume endpoints with token:
 
@@ -175,14 +206,14 @@ Equivalent replay mode protection:
 python -m bnnr dashboard serve --run-dir reports_quickstart --port 8080 --token "change-me"
 ```
 
-## 8) Read the generated report
+## 10) Read the generated report
 
 ```bash
 RUN_DIR=$(ls -1dt reports_quickstart/run_* | head -n 1)
 python -m bnnr report "$RUN_DIR/report.json" --format summary
 ```
 
-## 9) Replay dashboard for an existing run
+## 11) Replay dashboard for an existing run
 
 ```bash
 python -m bnnr dashboard serve --run-dir reports_quickstart --port 8080
@@ -193,7 +224,7 @@ Use replay mode when:
 - you want to inspect old runs,
 - you want to share run review without retraining.
 
-## 10) Export static dashboard snapshot
+## 12) Export static dashboard snapshot
 
 ```bash
 RUN_DIR=$(ls -1dt reports_quickstart/run_* | head -n 1)
@@ -204,12 +235,13 @@ python -m bnnr dashboard export \
 
 Open `exported_dashboard/index.html`.
 
-## 11) One-shot mode (no live dashboard)
+## 13) One-shot mode (no live dashboard)
 
 If you only need train + artifacts quickly:
 
 ```bash
 python -m bnnr train \
+  --config /tmp/bnnr_quickstart.yaml \
   --dataset cifar10 \
   --max-train-samples 128 \
   --max-val-samples 64 \
@@ -217,11 +249,9 @@ python -m bnnr train \
   --without-dashboard
 ```
 
-Add `--config /tmp/bnnr_quickstart.yaml` when using a custom YAML file.
-
 `--without-dashboard` disables only live server. Event logging remains enabled by CLI for post-run replay/export.
 
-## 12) Loading trained model for inference
+## 14) Loading trained model for inference
 
 After training, load the best checkpoint for inference:
 
@@ -239,13 +269,13 @@ model.eval()
 
 See [Troubleshooting](/docs/troubleshooting/) section 13 for details on checkpoint keys and PyTorch version notes.
 
-## 13) Next pages
+## 15) Next pages
 
-- [Dashboard Guide](/docs/dashboard/)
-- [Examples Guide](/docs/examples/)
-- [Notebooks Guide](/docs/notebooks/)
-- [Configuration](/docs/configuration/)
-- [CLI Reference](/docs/cli/)
-- [API Reference](/docs/api-reference/)
-- [Detection](/docs/detection/)
-- [Troubleshooting](/docs/troubleshooting/)
+- `dashboard.md`
+- `detection.md`
+- `examples.md`
+- `notebooks.md`
+- `configuration.md`
+- `cli.md`
+- `api_reference.md`
+- `troubleshooting.md`
