@@ -70,9 +70,9 @@ export function Hero() {
                 </span>
               </h1>
               <p className="text-lg md:text-xl leading-relaxed mb-4" style={{ color: "var(--muted)" }}>
-                BNNR automatically improves your PyTorch vision models using XAI —
-                find what your model gets wrong, fix it with intelligent augmentation,
-                and prove the result with structured reports and a live dashboard.
+                XAI-driven augmentation &amp; diagnostics for PyTorch vision:
+                find model failures, fix with saliency-guided augmentation
+                (ICD/AICD), prove with auditable reports.
               </p>
               <p className="text-sm leading-relaxed mb-6" style={{ color: "var(--muted)" }}>
                 Zero flags:{" "}

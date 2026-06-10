@@ -7,7 +7,7 @@ const stats = [
   { icon: <Shield size={20} />, label: "MIT License", value: "Open Source" },
   { icon: <Code2 size={20} />, label: "Python", value: "3.10+" },
   { icon: <Cpu size={20} />, label: "PyTorch", value: "2.0+" },
-  { icon: <FileCode size={20} />, label: "PyPI", value: "0.4.11" },
+  { icon: <FileCode size={20} />, label: "PyPI", value: "0.4.14" },
 ];
 
 export function StatsBar() {
